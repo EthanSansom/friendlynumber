@@ -429,35 +429,6 @@ get_hundreds <- function(numbers) {
   numbers - (numbers %/% 1000) * 1000
 }
 
-# `new` is slower by ~3 microseconds for small numbers
-x_small <- c(1:10000)
-bench::mark(
-  old = x_small %% 1000,
-  warn = suppressWarnings(x_small %% 1000),
-  new = x_small - (x_small %/% 1000) * 1000
-)
-# A tibble: 3 × 13
-# expression      min median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory     time
-# <bch:expr> <bch:tm> <bch:>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>     <list>
-#   1 old          34.6µs 40.8µs    23535.    78.2KB     47.1  9491    19      403ms <dbl>  <Rprofmem> <bench_tm>
-#   2 warn         35.7µs 40.8µs    23901.    78.2KB     44.0  9779    18      409ms <dbl>  <Rprofmem> <bench_tm>
-#   3 new          37.5µs 42.5µs    23759.    78.2KB     46.3  9757    19      411ms <dbl>  <Rprofmem> <bench_tm>
-
-# `new` is almost twice as fast when there's a "too-large" number
-x_large <- c(1:10000, 10^10, 10^20, 10^100, 10^500)
-bench::mark(
-  old = x_large %% 1000,
-  warn = suppressWarnings(x_large %% 1000),
-  new = x_large - (x_large %/% 1000) * 1000
-)
-# A tibble: 3 × 13
-# expression      min median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory     time
-# <bch:expr> <bch:tm> <bch:>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>     <list>
-#   1 old          53.3µs 58.3µs    16124.    79.1KB     32.7  6907    14      428ms <dbl>  <Rprofmem> <bench_tm>
-#   2 warn         60.6µs 66.1µs    14699.    78.2KB     30.0  6380    13      434ms <dbl>  <Rprofmem> <bench_tm>
-#   3 new          31.3µs 36.8µs    26813.    78.2KB     56.4  9979    21      372ms <dbl>  <Rprofmem> <bench_tm>
-# There were 50 or more warnings (use warnings() to see the first 50)
-
 consume_hundreds <- function(numbers) {
   numbers %/% 1000
 }
