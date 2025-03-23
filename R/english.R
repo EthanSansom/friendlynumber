@@ -394,6 +394,8 @@ english$suffixes <- c(
 )
 
 # functions --------------------------------------------------------------------
+# - `numbers` is expected to be a non-zero positive integer-ish number
+# - `doubles` is expected to be a non-zero positive numeric
 
 # Covers numbers 0-999
 english_hundreds <- function(numbers, suffix = "") {
@@ -406,6 +408,8 @@ english_naturals <- function(numbers, prefixes, iteration = 1L) {
   if (!any(nonzero_numbers)) {
     return(prefixes)
   }
+
+  # print(glue::glue("numbers: {numbers}, prefixes: {prefixes}, iteration: {iteration}"))
 
   # We're only going to add prefixes whenever the 100's are empty. Otherwise we
   # get `1,000,000` -> "one million thousand", but we just want "one million".
@@ -424,11 +428,193 @@ english_naturals <- function(numbers, prefixes, iteration = 1L) {
 }
 
 # Using `%%` for large number raising an accuracy warning. Try `10^100 %% 100`.
+# - this doesn't work for `.Machine$double.xmax`, think of a solution for very large numbers
+# - use {bignum} for `biginteger_friendly` and `bignumber_friendly`: https://davidchall.github.io/bignum/index.html
 get_hundreds <- function(numbers) {
-  # numbers %% 1000
-  numbers - (numbers %/% 1000) * 1000
+  numbers %% 1000
+  # numbers - ((numbers %/% 1000) * 1000)
 }
+# TODO: Okay, revert back to modulo with `%%`, and use {bignum} to handle larger numbers
 
 consume_hundreds <- function(numbers) {
   numbers %/% 1000
 }
+
+# decimal numbers --------------------------------------------------------------
+# - `decimal_characters` is the output of `format(<numeric>, digits = 16, scientific = FALSE)`
+#   where <numeric> is less than 1
+
+english_decimal <- function(decimal_characters) {
+  n_decimals <- nchar(decimal_characters) - 2L # Adjust for the prefix "0."
+  numbers <- as.numeric(decimal_characters) * 10^n_decimals
+
+  # `english_naturals()` leaves a space after it's output, so can use `paste0()`
+  paste0(
+    english_naturals(numbers, prefixes = character(length(numbers))),
+    nice_tenillions(n_decimals),
+    # "one thousandth" for "0.001" vs. "two thousandths" for "0.002"
+    ifelse(grepl("1$", decimal_characters), "th", "ths")
+  )
+}
+
+# Turns "0.0123" into "zero one two three" as in "zero point zero one two three"
+english_point <- function(decimal_characters, zero = "zero") {
+  fractional_characters <- substr(decimal_characters, 3, nchar(decimal_characters))
+  trimws(
+    gsub("0", paste0(trimws(zero), " "),
+      gsub("1", "one ",
+          gsub("2", "two ",
+              gsub("3", "three ",
+                  gsub("4", "four ",
+                      gsub("5", "five ",
+                          gsub("6", "six ",
+                              gsub("7", "seven ",
+                                  gsub("8", "eigth ",
+                                      gsub("9", "nine ", fractional_characters)))))))))))
+}
+
+
+
+# TODO: If you want to get really precise decimals, use {bignum} or C
+
+# https://stackoverflow.com/questions/54017905/extracting-the-complete-decimal-part-of-the-number-in-r
+# TODO: Make sure all of these operations are supported by {bignum}
+# - wow, we lose precision so fast here
+get_decimal_part <- function(doubles) {
+  doubles - trunc(doubles)
+}
+
+# From: https://stackoverflow.com/questions/9553354/how-do-i-get-the-decimal-places-of-a-floating-point-number-in-javascript
+precision <- function(doubles) {
+  p <- rep_len(0, length(doubles))
+  e <- p + 1
+
+  precision_not_found <- trunc(doubles * e) / e != doubles
+  while (any(precision_not_found)) {
+    e[precision_not_found] <- e[precision_not_found] * 10
+    p[precision_not_found] <- p[precision_not_found] + 1
+    precision_not_found <- trunc(doubles * e) / e != doubles
+  }
+  p
+}
+
+precision_2 <- function(doubles) {
+  p <- rep_len(0, length(doubles))
+  e <- p + 1
+
+  precision_not_found <- trunc(doubles * e) > 0
+  while (any(precision_not_found)) {
+    e[precision_not_found] <- e[precision_not_found] * 10
+    p[precision_not_found] <- p[precision_not_found] + 1
+    precision_not_found <- trunc(doubles * e) / e != doubles
+  }
+  p
+}
+
+if (FALSE) {
+  bench::mark(integer_friendly(1:10000))
+
+  format(x, scientific = FALSE)
+
+  format(1 / 6, scientific = FALSE, digits = 16)
+
+  cx <- "0.000000125"
+
+
+  x <- round(1 + runif(10), 5)
+  get_decimal_part(x)
+
+  precision(x) == precision(get_decimal_part(x))
+
+  format(
+    get_decimal_part(bignum::as_bigfloat("1.00000000000005"))
+  )
+
+  precision_3(1.00000000000000000005)
+
+  x <- runif(1000000)
+  all(precision(x) == precision_2(x))
+
+  bench::mark(
+    precision(x),
+    precision_2(x)
+  )
+
+
+  precision2 <- function() {
+    e <- 1
+
+    precision_not_found <- trunc(doubles * e) / e != doubles
+
+    while (any(precision_not_found)) {
+      e[precision_not_found] <- e[precision_not_found] * 10
+      p[precision_not_found] <- p[precision_not_found] + 1
+      precision_not_found <- trunc(doubles * e) / e != doubles
+    }
+  }
+
+  doubles <- runif(1)
+
+  p <- rep_len(0, length(doubles))
+  e <- p + 1
+
+  precision_not_found <- trunc(doubles * e) / e != doubles
+
+  e[precision_not_found] <- e[precision_not_found] * 10
+  p[precision_not_found] <- p[precision_not_found] + 1
+
+  (hit <- trunc(doubles * e) / e)
+  result <- hit != doubles
+
+
+  x <- runif(1000000)
+  bench::mark(
+    precision(x)
+  )
+
+  x <- 1:10
+  x[] <- 0
+  x
+
+  x <- runif(1)
+  10^n_decimals(x) * get_decimal_part(x)
+
+  n_decimals(x + 1)
+
+  # What's the fastest way to get the decimal component? (`trunc()` is our winner)
+
+  set.seed(123)
+  x_small <- 1:10000 + runif(10000)
+
+  bench::mark(
+    floor = x_small - floor(x_small),
+    mod = x_small %% 1,
+    int = x_small - as.integer(x_small),
+    trun = x_small - trunc(x_small)
+  )
+  # A tibble: 4 × 13
+  # expression      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result         memory             time                gc
+  # <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list>         <list>             <list>              <list>
+  #   1 floor        12.5µs   17.4µs    51305.    78.2KB    103.   9980    20      195ms <dbl [10,000]> <Rprofmem [1 × 3]> <bench_tm [10,000]> <tibble>
+  #   2 mod          33.8µs   37.8µs    25808.    78.2KB     41.4  9984    16      387ms <dbl [10,000]> <Rprofmem [1 × 3]> <bench_tm [10,000]> <tibble>
+  #   3 int          19.7µs   26.3µs    37036.   117.3KB     89.1  9976    24      269ms <dbl [10,000]> <Rprofmem [2 × 3]> <bench_tm [10,000]> <tibble>
+  #   4 trun         12.5µs   16.8µs    59795.    78.2KB     89.8  9985    15      167ms <dbl [10,000]> <Rprofmem [1 × 3]> <bench_tm [10,000]> <tibble>
+
+  x_large <- c(1:1000, 10^10, 10^20, 10^30, 10^40, 10^100, 10^500)
+  x_large <- x_large + runif(length(x_large))
+
+  bench::mark(
+    floor = x_large - floor(x_large),
+    mod = x_large %% 1,
+    # int = x_large - as.integer(x_large), -> large numbers introduce NA's
+    trun = x_large - trunc(x_large)
+  )
+  # A tibble: 3 × 13
+  # expression      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result        memory             time                gc
+  # <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list>        <list>             <list>              <list>
+  #   1 floor        1.35µs   1.97µs   419239.    7.91KB     41.9  9999     1     23.9ms <dbl [1,006]> <Rprofmem [1 × 3]> <bench_tm [10,000]> <tibble>
+  #   2 mod         41.66µs  43.95µs    21828.    8.78KB     13.1  9994     6    457.9ms <dbl [1,006]> <Rprofmem [3 × 3]> <bench_tm [10,000]> <tibble>
+  #   3 trun         1.31µs    1.8µs   466385.    7.91KB     46.6  9999     1     21.4ms <dbl [1,006]> <Rprofmem [1 × 3]> <bench_tm [10,000]> <tibble>
+  #   There were 50 or more warnings (use warnings() to see the first 50)
+}
+
