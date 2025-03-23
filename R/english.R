@@ -1,3 +1,4 @@
+# constants --------------------------------------------------------------------
 english <- new.env(parent = emptyenv())
 
 english$hundreds <- c(
@@ -321,18 +322,142 @@ english$hundreds <- c(
   "nine hundred ninety-seven", "nine hundred ninety-eight", "nine hundred ninety-nine"
 )
 
+# Generated via `nice_illions(1:200)`. Maxes out at 1000^200. On my machine
+# `.Machine$double.xmax = 1.797693e+308` is on the same order as 1000^{102.7},
+# so we're fine for most realistic cases.
 english$suffixes <- c(
-  # Thanks:
-  # - https://en.wikipedia.org/wiki/Names_of_large_numbers
-  # - cookiefonster99 https://sites.google.com/site/pointlesslargenumberstuff/home/1/extendedillions1
-  # These suffixes use Conway and Guy's simplified system for `illions`.
-  c(
-    "", " thousand", " million", " billion", " trillion", " quadrillion",
-    " quintillion", " sextillion", " septillion"
-  )
-  # TODO: Once `conway_and_guy()` is working, update this for up to the IEEE
-  # standard for floating point I think it's 10^303 or something. Make sure you
-  # can represent `.Machine$double.xmax` and `.Machine$double.xmin`
+  "", " thousand", " million", " billion", " trillion", " quadrillion",
+  " quintillion", " sextillion", " septillion", " octillion", " nonillion",
+  " decillion", " undecillion", " duodecillion", " tredecillion",
+  " quattuordecillion", " quindecillion", " sedecillion", " septendecillion",
+  " octodecillion", " novendecillion", " vigintillion", " unvigintillion",
+  " duovigintillion", " tresvigintillion", " quattuorvigintillion",
+  " quinvigintillion", " sesvigintillion", " septemvigintillion",
+  " octovigintillion", " novemvigintillion", " trigintillion",
+  " untrigintillion", " duotrigintillion", " trestrigintillion",
+  " quattuortrigintillion", " quintrigintillion", " sestrigintillion",
+  " septentrigintillion", " octotrigintillion", " noventrigintillion",
+  " quadragintillion", " unquadragintillion", " duoquadragintillion",
+  " tresquadragintillion", " quattuorquadragintillion", " quinquadragintillion",
+  " sesquadragintillion", " septenquadragintillion", " octoquadragintillion",
+  " novenquadragintillion", " quinquagintillion", " unquinquagintillion",
+  " duoquinquagintillion", " tresquinquagintillion", " quattuorquinquagintillion",
+  " quinquinquagintillion", " sesquinquagintillion", " septenquinquagintillion",
+  " octoquinquagintillion", " novenquinquagintillion", " sexagintillion",
+  " unsexagintillion", " duosexagintillion", " tresexagintillion",
+  " quattuorsexagintillion", " quinsexagintillion", " sesexagintillion",
+  " septensexagintillion", " octosexagintillion", " novensexagintillion",
+  " septuagintillion", " unseptuagintillion", " duoseptuagintillion",
+  " treseptuagintillion", " quattuorseptuagintillion", " quinseptuagintillion",
+  " seseptuagintillion", " septenseptuagintillion", " octoseptuagintillion",
+  " novenseptuagintillion", " octogintillion", " unoctogintillion",
+  " duooctogintillion", " tresoctogintillion", " quattuoroctogintillion",
+  " quinoctogintillion", " sexoctogintillion", " septemoctogintillion",
+  " octooctogintillion", " novemoctogintillion", " nonagintillion",
+  " unnonagintillion", " duononagintillion", " trenonagintillion",
+  " quattuornonagintillion", " quinnonagintillion", " senonagintillion",
+  " septenonagintillion", " octononagintillion", " novenonagintillion",
+  " centillion", " uncentillion", " duocentillion", " trescentillion",
+  " quattuorcentillion", " quincentillion", " sexcentillion", " septencentillion",
+  " octocentillion", " novencentillion", " decicentillion", " undecicentillion",
+  " duodecicentillion", " tredecicentillion", " quattuordecicentillion",
+  " quindecicentillion", " sedecicentillion", " septendecicentillion",
+  " octodecicentillion", " novendecicentillion", " viginticentillion",
+  " unviginticentillion", " duoviginticentillion", " tresviginticentillion",
+  " quattuorviginticentillion", " quinviginticentillion", " sesviginticentillion",
+  " septemviginticentillion", " octoviginticentillion", " novemviginticentillion",
+  " trigintacentillion", " untrigintacentillion", " duotrigintacentillion",
+  " trestrigintacentillion", " quattuortrigintacentillion", " quintrigintacentillion",
+  " sestrigintacentillion", " septentrigintacentillion", " octotrigintacentillion",
+  " noventrigintacentillion", " quadragintacentillion", " unquadragintacentillion",
+  " duoquadragintacentillion", " tresquadragintacentillion", " quattuorquadragintacentillion",
+  " quinquadragintacentillion", " sesquadragintacentillion", " septenquadragintacentillion",
+  " octoquadragintacentillion", " novenquadragintacentillion",
+  " quinquagintacentillion", " unquinquagintacentillion", " duoquinquagintacentillion",
+  " tresquinquagintacentillion", " quattuorquinquagintacentillion",
+  " quinquinquagintacentillion", " sesquinquagintacentillion",
+  " septenquinquagintacentillion", " octoquinquagintacentillion",
+  " novenquinquagintacentillion", " sexagintacentillion", " unsexagintacentillion",
+  " duosexagintacentillion", " tresexagintacentillion", " quattuorsexagintacentillion",
+  " quinsexagintacentillion", " sesexagintacentillion", " septensexagintacentillion",
+  " octosexagintacentillion", " novensexagintacentillion", " septuagintacentillion",
+  " unseptuagintacentillion", " duoseptuagintacentillion", " treseptuagintacentillion",
+  " quattuorseptuagintacentillion", " quinseptuagintacentillion",
+  " seseptuagintacentillion", " septenseptuagintacentillion", " octoseptuagintacentillion",
+  " novenseptuagintacentillion", " octogintacentillion", " unoctogintacentillion",
+  " duooctogintacentillion", " tresoctogintacentillion", " quattuoroctogintacentillion",
+  " quinoctogintacentillion", " sexoctogintacentillion", " septemoctogintacentillion",
+  " octooctogintacentillion", " novemoctogintacentillion", " nonagintacentillion",
+  " unnonagintacentillion", " duononagintacentillion", " trenonagintacentillion",
+  " quattuornonagintacentillion", " quinnonagintacentillion", " senonagintacentillion",
+  " septenonagintacentillion", " octononagintacentillion", " novenonagintacentillion"
 )
 
+# functions --------------------------------------------------------------------
 
+# Covers numbers 0-999
+english_hundreds <- function(numbers, suffix = "") {
+  paste0(english$hundreds[numbers + 1], suffix)
+}
+
+# Covers the natural numbers (excluding zero)
+english_naturals <- function(numbers, prefixes, iteration = 1L) {
+  nonzero_numbers <- numbers != 0
+  if (!any(nonzero_numbers)) {
+    return(prefixes)
+  }
+
+  # We're only going to add prefixes whenever the 100's are empty. Otherwise we
+  # get `1,000,000` -> "one million thousand", but we just want "one million".
+  hundreds <- get_hundreds(numbers[nonzero_numbers])
+  nonzero_hundreds <- hundreds != 0
+
+  prefixes[nonzero_numbers][nonzero_hundreds] <- paste(
+    english_hundreds(
+      numbers = hundreds[nonzero_hundreds],
+      suffix = english$suffixes[iteration]
+    ),
+    prefixes[nonzero_numbers][nonzero_hundreds]
+  )
+  numbers <- consume_hundreds(numbers)
+  english_naturals(numbers, prefixes, iteration = iteration + 1L)
+}
+
+# Using `%%` for large number raising an accuracy warning. Try `10^100 %% 100`.
+get_hundreds <- function(numbers) {
+  # numbers %% 1000
+  numbers - (numbers %/% 1000) * 1000
+}
+
+# `new` is slower by ~3 microseconds for small numbers
+x_small <- c(1:10000)
+bench::mark(
+  old = x_small %% 1000,
+  warn = suppressWarnings(x_small %% 1000),
+  new = x_small - (x_small %/% 1000) * 1000
+)
+# A tibble: 3 × 13
+# expression      min median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory     time
+# <bch:expr> <bch:tm> <bch:>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>     <list>
+#   1 old          34.6µs 40.8µs    23535.    78.2KB     47.1  9491    19      403ms <dbl>  <Rprofmem> <bench_tm>
+#   2 warn         35.7µs 40.8µs    23901.    78.2KB     44.0  9779    18      409ms <dbl>  <Rprofmem> <bench_tm>
+#   3 new          37.5µs 42.5µs    23759.    78.2KB     46.3  9757    19      411ms <dbl>  <Rprofmem> <bench_tm>
+
+# `new` is almost twice as fast when there's a "too-large" number
+x_large <- c(1:10000, 10^10, 10^20, 10^100, 10^500)
+bench::mark(
+  old = x_large %% 1000,
+  warn = suppressWarnings(x_large %% 1000),
+  new = x_large - (x_large %/% 1000) * 1000
+)
+# A tibble: 3 × 13
+# expression      min median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory     time
+# <bch:expr> <bch:tm> <bch:>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>     <list>
+#   1 old          53.3µs 58.3µs    16124.    79.1KB     32.7  6907    14      428ms <dbl>  <Rprofmem> <bench_tm>
+#   2 warn         60.6µs 66.1µs    14699.    78.2KB     30.0  6380    13      434ms <dbl>  <Rprofmem> <bench_tm>
+#   3 new          31.3µs 36.8µs    26813.    78.2KB     56.4  9979    21      372ms <dbl>  <Rprofmem> <bench_tm>
+# There were 50 or more warnings (use warnings() to see the first 50)
+
+consume_hundreds <- function(numbers) {
+  numbers %/% 1000
+}
