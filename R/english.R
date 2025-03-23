@@ -393,6 +393,46 @@ english$suffixes <- c(
   " septenonagintacentillion", " octononagintacentillion", " novenonagintacentillion"
 )
 
+# These are meant to work with `format_fractional.numeric()`, the output of
+# which should be the correct key to this dictionary.
+english$fractionals <- c(
+  # n / 2
+  `0.5` = "one half",
+  # n / 3
+  `0.333333333333333` = "one third",
+  `0.666666666666667` = "two thirds",
+  # n / 4
+  `0.25` = "one quarter",
+  `0.75` = "three quarters",
+  # n / 5
+  `0.2` = "one fifth",
+  `0.4` = "two fifths",
+  `0.6` = "three fifths",
+  `0.8` = "four fifths",
+  # n / 6
+  `0.166666666666667` = "one sixth",
+  `0.833333333333333` = "five sixths",
+  # n / 7
+  `0.142857142857143` = "one seventh", `0.285714285714286` = "two sevenths",
+  `0.428571428571429` = "three sevenths", `0.571428571428571` = "four sevenths",
+  `0.714285714285714` = "five sevenths", `0.857142857142857` = "six sevenths",
+  # n / 8
+  `0.125` = "one eigth", `0.375` = "three eigths",
+  `0.625` = "five eigths", `0.875` = "seven eigths",
+  # n / 9
+  `0.111111111111111` = "one ninth", `0.222222222222222` = "two ninths",
+  `0.444444444444444` = "four ninths", `0.555555555555556` = "five ninths",
+  `0.777777777777778` = "seven ninths", `0.888888888888889` = "eight ninths"
+)
+
+format_fractional(1:2 / 3)
+format_fractional(1:3 / 4)
+format_fractional(1:4 / 5)
+format_fractional(1:5 / 6)
+format_fractional(1:6 / 7) |> rlang::set_names(nm = _, x = rep("sevenths", 6)) |> dput()
+format_fractional(1:7 / 8) |> rlang::set_names(nm = _, x = rep("eigths", 7)) |> dput()
+format_fractional(1:8 / 9) |> rlang::set_names(nm = _, x = rep("seven ninths", 8)) |> dput()
+
 # functions --------------------------------------------------------------------
 # - `numbers` is expected to be a non-zero positive integer-ish number
 # - `doubles` is expected to be a non-zero positive numeric
@@ -438,32 +478,17 @@ consume_hundreds <- function(numbers) {
   numbers %/% 1000
 }
 
-get_fractional <- function(numbers) {
-  # Faster than `x %% 1`, not sure about the precision
-  x - trunc(x)
+get_fractional <- function(doubles) {
+  # Faster than `doubles %% 1`, and seems to give the same result
+  doubles - trunc(doubles)
 }
 
-get_whole <- function(numbers) {
-  trunc(x)
-}
-
-# Test what to use for `get_whole()` and `get_fractional()`
-if (FALSE) {
-  set.seed(123)
-  x <- runif(1000) + 1:1000
-
-  # `trunc()` method is faster in both cases, not sure about precision although
-  # for this test they get the same results.
-  bench::mark(x %/% 1, trunc(x))
-  bench::mark(x %% 1, x - trunc(x))
-
-  # They get the same results for "weird" numbers
-  y <- c(1/3, 1/6, 1/7, pi)
-  bench::mark(y %% 1, y - trunc(y), check = TRUE)
+get_whole <- function(doubles) {
+  trunc(doubles)
 }
 
 # decimal numbers --------------------------------------------------------------
-# - `decimal_characters` is the output of `format(<numeric>, digits = 16, scientific = FALSE)`
+# - `decimal_characters` is the output of `format_fractional(<numeric>)`
 #   where <numeric> is less than 1
 
 english_decimal <- function(decimal_characters) {
