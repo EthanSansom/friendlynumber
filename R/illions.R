@@ -147,7 +147,3 @@ nice_tenillions <- function(tens_power) {
   trimws(paste(c("", "ten", "hundred")[(tens_power %% 3) + 1], nice_illions))
 }
 
-1 %/% 3
-
-1 %% 3
-
