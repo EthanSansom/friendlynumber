@@ -1,3 +1,5 @@
+# illions ----------------------------------------------------------------------
+
 illions <- function(thousands_power) {
   n <- length(thousands_power)
   if (n == 0) {
@@ -133,9 +135,19 @@ nice_illions <- function(thousands_power) {
   out
 }
 
-out <- ""
-start <- 0
-end <- 0
-last_num <- 0
+# tenillions -------------------------------------------------------------------
 
-dput(nums)
+tenillions <- function(tens_power) {
+  illions <- illions(tens_power %/% 3)
+  trimws(paste(c("", "ten", "hundred")[(tens_power %% 3) + 1], illions))
+}
+
+nice_tenillions <- function(tens_power) {
+  nice_illions <- nice_illions(tens_power %/% 3)
+  trimws(paste(c("", "ten", "hundred")[(tens_power %% 3) + 1], nice_illions))
+}
+
+1 %/% 3
+
+1 %% 3
+
