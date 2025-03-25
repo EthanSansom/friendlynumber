@@ -25,7 +25,9 @@ numeric_friendly <- function(
     negative = "negative",
     decimal = " and ",
     and = FALSE,
-    hyphenate = TRUE
+    hyphenate = TRUE,
+    and_fractional = and,
+    hyphenate_fractional = hyphenate
   ) {
 
   # NOTE: No, this doesn't yield any speedup.
@@ -66,13 +68,26 @@ numeric_friendly <- function(
   is_fractional <- remaining_wholes == 0
   is_compound <- !is_whole & !is_fractional
 
-  out[needs_englishifying][is_whole] <- trimws(english_naturals(remaining_wholes[is_whole]))
-  out[needs_englishifying][is_fractional] <- english_fractionals(remaining_fractionals[is_fractional], zero = zero)
+  # TODO: Is there a speed difference if we do both naturals and fractions for
+  # every element of `out[needs_englishifying]` and then drop the whole or
+  # fractional portion as needed?
+
+  out[needs_englishifying][is_whole] <- english_naturals(
+    remaining_wholes[is_whole],
+    and = and,
+    hyphenate = hyphenate
+  )
+  out[needs_englishifying][is_fractional] <- english_fractionals(
+    remaining_fractionals[is_fractional],
+    and = and_fractional,
+    hyphenate = hyphenate_fractional,
+    zero = zero
+  )
 
   out[needs_englishifying][is_compound] <- paste0(
-    trimws(english_naturals(remaining_wholes[is_compound])),
+    english_naturals(remaining_wholes[is_compound], and = and, hyphenate = hyphenate),
     decimal,
-    english_fractionals(remaining_fractionals[is_compound], zero = zero)
+    english_fractionals(remaining_fractionals[is_compound], and = and, hyphenate = hyphenate, zero = zero)
   )
 
   # TODO: We might have to be more careful about this `sub()`, since `decimal`
@@ -86,56 +101,3 @@ numeric_friendly <- function(
   out <- sub(paste0(decimal, zero, "$"), "", out)
   out
 }
-
-
-if (FALSE) {
-  load_all()
-
-  numeric_friendly(999.123)
-
-  numbers <- 999.123
-  decimal <- " and "
-
-  needs_englishifying <- TRUE
-
-  remaining_numbers <- numbers[needs_englishifying]
-  english_whole <- integer_friendly(trunc(remaining_numbers))
-
-  # english_fractionals <- english_fractionals(remaining_numbers)
-
-  fractionals <- 0.123
-
-  fractional_characters <- format_fractional(fractionals)
-  n_decimals <- nchar(fractional_characters) - 2L # Adjust for the prefix "0."
-  naturals <- as.numeric(fractional_characters) * 10^n_decimals
-
-  # `english_naturals()` leaves a space after it's output, so can use `paste0()`
-  paste0(
-    english_naturals(naturals),
-    nice_tenillions(n_decimals),
-    # "one thousandth" for "0.001" vs. "two thousandths" for "0.002"
-    ifelse(grepl("1$", fractional_characters), "th", "ths")
-  )
-
-
-  whole <- trunc(remaining_numbers)
-  fractional <- remaining_numbers - whole
-
-  whole_only <- fractional == 0
-  fractional_only <- whole == 0
-  compound <- !whole_only & !fractional_only
-
-  remaining_numbers[rounded_zeros] <- zero
-  remaining_numbers[whole_only] <- english_naturals(whole[whole_only])
-  remaining_numbers[fractional_only] <- english_fractionals(fractional[fractional_only])
-
-  remaining_numbers[compound] <- paste0(
-    trimws(english_naturals(whole[compound])),
-    decimal,
-    english_fractionals(fractional[compound])
-  )
-
-}
-
-
-

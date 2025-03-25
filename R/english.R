@@ -444,11 +444,20 @@ english_hundreds <- function(naturals, suffix = "") {
   paste0(english$hundreds[as.integer(naturals + 1L)], suffix)
 }
 
+# Covers the natural numbers (excluding zero)
+english_naturals <- function(naturals, and = FALSE, hyphenate = TRUE) {
+  out <- english_naturals_recursive(
+    naturals = naturals,
+    prefixes = character(length(naturals)),
+    iteration = 1L
+  )
+  after_format(trimws(out), and = and, hyphenate = hyphenate)
+}
+
 # TODO: Try a `while` or `for` loop at some point instead of recursion, see if
 # faster for small and large naturals separately.
-#
-# Covers the natural numbers (excluding zero)
-english_naturals <- function(naturals, prefixes = character(length(naturals)), iteration = 1L) {
+english_naturals_recursive <- function(naturals, prefixes, iteration) {
+
   nonzero_naturals <- naturals != 0
   if (!any(nonzero_naturals)) {
     return(prefixes)
@@ -459,8 +468,6 @@ english_naturals <- function(naturals, prefixes = character(length(naturals)), i
   hundreds <- get_hundreds(naturals[nonzero_naturals])
   nonzero_hundreds <- hundreds != 0
 
-  # TODO: Does this need to return a trailing space? Think about whether we can
-  # make this just return the exact answer we want, to avoid confusion.
   prefixes[nonzero_naturals][nonzero_hundreds] <- paste(
     english_hundreds(
       naturals = hundreds[nonzero_hundreds],
@@ -469,7 +476,7 @@ english_naturals <- function(naturals, prefixes = character(length(naturals)), i
     prefixes[nonzero_naturals][nonzero_hundreds]
   )
   naturals <- consume_hundreds(naturals)
-  english_naturals(naturals, prefixes, iteration = iteration + 1L)
+  english_naturals_recursive(naturals, prefixes, iteration = iteration + 1L)
 }
 
 # This will raise warnings about precision issues for large numbers, which is
@@ -488,8 +495,15 @@ consume_hundreds <- function(naturals) {
 #   where <numeric> is less than 1
 # - `doubles` is expected to be a non-zero positive numeric
 
-# TODO: Implement. Handles numbers in range (0, 1)
-english_fractionals <- function(fractionals, zero = "zero", nice_fractionals = get_nice_fractionals()) {
+# Covers numbers in range (0, 1)
+english_fractionals <- function(
+    fractionals,
+    zero = "zero",
+    and = FALSE,
+    hyphenate = TRUE,
+    nice_fractionals = get_nice_fractionals()
+  ) {
+
   out <- character(length(fractionals))
 
   # The number of "english" decimal places is dependent on the number of decimals
@@ -507,6 +521,10 @@ english_fractionals <- function(fractionals, zero = "zero", nice_fractionals = g
   out[zeros] <- zero
   out[nices] <- nice_fractionals[fractional_characters]
 
+  # TODO: For `bignum::bigfloat` we want to just give the character to
+  # `bignum::biginteger()` since `bignum::biginteger()` takes a character as its
+  # input anyways, and can handle more digits than `as.numeric()`.
+  #
   # TODO: Test if we need to trim the leading zeros here
   # - is it faster? slower?
   # - does not doing it introduce precision issues?
@@ -516,8 +534,8 @@ english_fractionals <- function(fractionals, zero = "zero", nice_fractionals = g
   natural_fracs <- as.numeric(sub("^0+", "", fractional_characters[fracs]))
 
   out[fracs] <- paste0(
-    # `english_naturals()` leaves a space after it's output, so can use `paste0()`
-    english_naturals(natural_fracs),
+    english_naturals(natural_fracs, and = and, hyphenate = hyphenate),
+    " ",
     nice_tenillions(n_decimals[fracs]),
     # "one thousandth" for "0.001" vs. "two thousandths" for "0.002"
     ifelse(grepl("1$", fractional_characters[fracs]), "th", "ths")
@@ -597,7 +615,7 @@ get_whole <- function(doubles) {
 
 # Add an "and" before the last number if in 1:99 (e.g. "one thousand and one"
 # and not "one thousand and one hundred")
-and <- function(english_numbers) {
+andify <- function(english_numbers) {
   last_number <- sub(".*\\s", "", english_numbers)
   needs_an_and <- last_number %in% english$hundreds[1:99 + 1]
 
@@ -611,4 +629,10 @@ and <- function(english_numbers) {
 
 unhypenate <- function(english_numbers) {
   sub("-", " ", english_numbers)
+}
+
+after_format <- function(english_numbers, and = FALSE, hyphenate = TRUE) {
+  if (and) english_numbers <- andify(english_numbers)
+  if (!hyphenate) english_numbers <- unhypenate(english_numbers)
+  english_numbers
 }
