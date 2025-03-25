@@ -1,6 +1,6 @@
 # number -----------------------------------------------------------------------
 
-# How to format a number (e.g. `bignum::bigpi`, 10.01, 0L)
+# How to format a number (e.g. `bignum::bigpi`, 10.01, 1L)
 #' @export
 format_number <- function(x, ...) {
   UseMethod("format_number")
@@ -21,8 +21,9 @@ format_number.numeric <- function(x, bigmark = ",") {
   x_trunc <- trunc(x)
   whole <- format_whole(x_trunc, bigmark = bigmark)
   fractional <- paste0(".", format_fractional(x - x_trunc))
-  fractional[nchar(fractional) == 1] <- ""
-  paste0(whole, fractional)
+  # Removes fractional part if fractional component is NA, NaN, Inf, -Inf, or 0
+  fractional[nchar(fractional) == 1 | fractional == ".N"] <- ""
+  trimws(paste0(whole, fractional))
 }
 
 #' @export
@@ -30,11 +31,18 @@ format_number.bignum_bigfloat <- function(x, bigmark = ",") {
   x_trunc <- trunc(x)
   whole <- format_whole(x_trunc, bigmark = bigmark)
   fractional <- paste0(".", format_fractional(x - x_trunc))
-  fractional[nchar(fractional) == 1] <- ""
-  paste0(whole, fractional)
+  # Removes fractional part if fractional component is NA, NaN, Inf, -Inf, or 0
+  fractional[nchar(fractional) == 1 | fractional %in% c(".NA", ".N")] <- ""
+  trimws(paste0(whole, fractional))
+}
+
+#' @export
+format_number.default <- function(x, ...) {
+  stop_unimplemented_method(x, "format_number()")
 }
 
 # whole ------------------------------------------------------------------------
+# - `.numeric()` and `.bignum_bigfloat()` are only valid if `x` is integerish
 
 # How to format a "whole" number (e.g. <integer>, <biginteger>, 1.0)
 #' @export
@@ -52,10 +60,8 @@ format_whole.numeric <- function(x, bigmark = ",") {
   format(x, scientific = FALSE, big.mark = bigmark) # TODO: Maybe `sprintf()` instead, see what's best
 }
 
-# TODO: `format_whole.bignum_bigfloat`
-
 #' @export
-format_whole.bignum_biginteger <- function(x, bigmark = ",") {
+format_whole.bignum_bigfloat <- function(x, bigmark = ",") {
   out <- format(x, notation = "dec")
   if (bigmark != "") {
     # Use a "," initially in case `bigmark` contains a control sequence
@@ -66,8 +72,18 @@ format_whole.bignum_biginteger <- function(x, bigmark = ",") {
 }
 
 #' @export
+format_whole.bignum_biginteger <- function(x, bigmark = ",") {
+  out <- format(x, notation = "dec")
+  if (bigmark != "") {
+    out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
+    if (bigmark != ",") out <- gsub(",", bigmark, out, fixed = TRUE)
+  }
+  out
+}
+
+#' @export
 format_whole.default <- function(x, ...) {
-  stop(paste0("No `format_whole()` method implemented for class <", class(x)[[1]], ">."))
+  stop_unimplemented_method(x, "format_whole()")
 }
 
 # fractional -------------------------------------------------------------------
@@ -98,36 +114,5 @@ format_fractional.bignum_bigfloat <- function(x) {
 
 #' @export
 format_fractional.default <- function(x, ...) {
-  stop(paste0("No `format_fractional()` method implemented for class <", class(x)[[1]], ">."))
-}
-
-# Test whether to use `format()` or `sprintf()`
-if (FALSE) {
-  format_1 <- function(x) {
-    format(x, digits = 16, scientific = FALSE)
-  }
-  format_2 <- function(x) {
-    # sub("0+$", "", sprintf("%.16f", x))
-    sprintf("%.16f", x)
-  }
-
-  # 18 characters ("0." + 16 digits)
-  format_1(1/3) |> nchar()
-  format_2(1/3) |> nchar()
-
-  # NOTE: The `digits` in `format()` seems like more of a suggestion, and reading
-  # do docs it seems like that's the case. We're going to want something more
-  # consistent.
-  set.seed(123)
-  x <- runif(1000)
-  format_1(c(1/3, x)) |> nchar() |> unique() # 21 characters, unexpected
-  format_2(c(1/3, x)) |> nchar() |> unique() # 18 characters, as expected
-
-  # `sprintf()` is faster anyways
-  bench::mark(
-    format_1(x),
-    format_2(x),
-    check = FALSE
-  )
-
+  stop_unimplemented_method(x, "format_fractional()")
 }
