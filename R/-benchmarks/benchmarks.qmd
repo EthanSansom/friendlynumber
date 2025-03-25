@@ -1,0 +1,79 @@
+---
+title: "benchmarks"
+format: pdf
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# TODO: This doesn't work yet!
+
+stopifnot(
+  "{bench} package is required to run this script." = requireNamespace("bench", quietly = TRUE),
+  "{english} package is required to run this script." = requireNamespace("english", quietly = TRUE),
+  "{nombre} package is required to run this script." = requireNamespace("nombre", quietly = TRUE),
+  "{friendlynumber} package is required to run this script." = requireNamespace("nombre", quietly = TRUE)
+)
+```
+
+
+## Between Packages
+
+```{r}
+#| label: between-package-scalars
+#| echo: true
+
+# TODO: `numeric_friendly()` slower than the alternatives for scalar tests.
+# Ideally it will be on-par with `integer_friendly()` for non-fractional numbers.
+
+# Scalar (small number)
+bench::mark(
+  english = as.character(english::english(1)),
+  nombre = as.character(nombre::nom_card(1)),
+  integer_friendly = as.character(friendlynumber::integer_friendly(1)),
+  numeric_friendly = as.character(friendlynumber::numeric_friendly(1))
+)[c("expression", "median", "itr/sec", "gc/sec")]
+
+# Scalar (large number)
+bench::mark(
+  english = as.character(english::english(1000000000)),
+  nombre = as.character(nombre::nom_card(1000000000)),
+  integer_friendly = as.character(friendlynumber::integer_friendly(1000000000)),
+  numeric_friendly = as.character(friendlynumber::numeric_friendly(1000000000))
+)[c("expression", "median", "itr/sec", "gc/sec")]
+
+# Scalar (non-number)
+bench::mark(
+  english = as.character(english::english(NA_real_)),
+  nombre = as.character(nombre::nom_card(NA_real_)),
+  integer_friendly = as.character(friendlynumber::integer_friendly(NA_real_)),
+  numeric_friendly = as.character(friendlynumber::numeric_friendly(NA_real_)),
+  check = FALSE
+)[c("expression", "median", "itr/sec", "gc/sec")]
+```
+
+
+```{r}
+#| label: between-package-vectors
+#| echo: true
+
+# Mid-length
+x <- 1:10000
+bench::mark(
+  english = as.character(english::english(x)),
+  nombre = as.character(nombre::nom_card(x)),
+  integer_friendly = as.character(friendlynumber::integer_friendly(x)),
+  numeric_friendly = as.character(friendlynumber::numeric_friendly(x))
+)[c("expression", "median", "itr/sec", "gc/sec")]
+
+# Long
+x <- 1:1000000
+bench::mark(
+  english = as.character(english::english(x)),
+  nombre = as.character(nombre::nom_card(x)),
+  integer_friendly = as.character(friendlynumber::integer_friendly(x)),
+  numeric_friendly = as.character(friendlynumber::numeric_friendly(x))
+)[c("expression", "median", "itr/sec", "gc/sec")]
+```
+
