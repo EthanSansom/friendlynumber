@@ -1,6 +1,42 @@
+# number -----------------------------------------------------------------------
+
+# How to format a number (e.g. `bignum::bigpi`, 10.01, 0L)
+#' @export
+format_number <- function(x, ...) {
+  UseMethod("format_number")
+}
+
+#' @export
+format_number.integer <- function(x, bigmark = ",") {
+  format_whole(x, bigmark = bigmark)
+}
+
+#' @export
+format_number.bignum_biginteger <- function(x, bigmark = ",") {
+  format_whole(x, bigmark = bigmark)
+}
+
+#' @export
+format_number.numeric <- function(x, bigmark = ",") {
+  x_trunc <- trunc(x)
+  whole <- format_whole(x_trunc, bigmark = bigmark)
+  fractional <- paste0(".", format_fractional(x - x_trunc))
+  fractional[nchar(fractional) == 1] <- ""
+  paste0(whole, fractional)
+}
+
+#' @export
+format_number.bignum_bigfloat <- function(x, bigmark = ",") {
+  x_trunc <- trunc(x)
+  whole <- format_whole(x_trunc, bigmark = bigmark)
+  fractional <- paste0(".", format_fractional(x - x_trunc))
+  fractional[nchar(fractional) == 1] <- ""
+  paste0(whole, fractional)
+}
+
 # whole ------------------------------------------------------------------------
 
-# How to format a "whole" number (e.g. <integer> or <biginteger>)
+# How to format a "whole" number (e.g. <integer>, <biginteger>, 1.0)
 #' @export
 format_whole <- function(x, ...) {
   UseMethod("format_whole")
@@ -13,8 +49,10 @@ format_whole.integer <- function(x, bigmark = ",") {
 
 #' @export
 format_whole.numeric <- function(x, bigmark = ",") {
-  format(x, nsmall = 0, scientific = FALSE, big.mark = bigmark)
+  format(x, scientific = FALSE, big.mark = bigmark) # TODO: Maybe `sprintf()` instead, see what's best
 }
+
+# TODO: `format_whole.bignum_bigfloat`
 
 #' @export
 format_whole.bignum_biginteger <- function(x, bigmark = ",") {
@@ -34,7 +72,7 @@ format_whole.default <- function(x, ...) {
 
 # fractional -------------------------------------------------------------------
 
-# How to format a fractional number in range (0, 1)
+# How to format a fractional number between 0 and 1 (e.g. `0.34567`)
 #' @export
 format_fractional <- function(x, ...) {
   UseMethod("format_fractional")
@@ -42,16 +80,20 @@ format_fractional <- function(x, ...) {
 
 #' @export
 format_fractional.numeric <- function(x) {
-  sub("0+$", "", sprintf("%.15f", x))
+  fmt <- paste0("%.", getOption("friendlynumber.numeric.digits"), "f")
+  out <- sub("0+$", "", sprintf(fmt, x))
+  # Remove the leading "0.", we only want the decimal components
+  substr(out, 3, nchar(out))
 }
 
 #' @export
 format_fractional.bignum_bigfloat <- function(x) {
-  sub("0+$", "", format(
+  out <- sub("0+$", "", format(
     x,
     notation = "dec",
     digits = getOption("friendlynumber.bigfloat.digits")
   ))
+  substr(out, 3, nchar(out))
 }
 
 #' @export
@@ -89,5 +131,3 @@ if (FALSE) {
   )
 
 }
-
-
