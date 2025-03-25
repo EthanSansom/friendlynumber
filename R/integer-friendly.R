@@ -5,7 +5,7 @@ integer_friendly <- function(
     na = "missing",
     nan = "not a number",
     inf = "infinity",
-    negative = "negative",
+    negative = "negative ",
     and = FALSE,
     hyphenate = TRUE
 ) {
@@ -28,22 +28,22 @@ integer_friendly <- function(
 
   needs_englishifying <- !(infinites | missings | zeros)
   if (!any(needs_englishifying)) {
-    out[negatives] <- paste(negative, inf) # Only `Inf` can be -ve at this point
+    out[negatives] <- paste0(negative, inf) # Only `Inf` can be -ve at this point
     return(out)
   }
 
   remaining_numbers <- abs(numbers[needs_englishifying])
   if (all(remaining_numbers < 1000)) {
-    out[needs_englishifying] <- english_hundreds(remaining_numbers)
-    out[negatives] <- paste(negative, out[negatives])
+    out[needs_englishifying] <- after_format(
+      english_hundreds(remaining_numbers),
+      and = and,
+      hyphenate = hyphenate
+    )
+    out[negatives] <- paste0(negative, out[negatives])
     return(out)
   }
 
-  out[needs_englishifying] <- english_naturals(remaining_numbers)
-  out[negatives] <- paste(negative, out[negatives])
-
-  out <- trimws(out)
-  if (and) out <- and(out)
-  if (!hyphenate) out <- unhypenate(out)
+  out[needs_englishifying] <- english_naturals(remaining_numbers, and = and, hyphenate = hyphenate)
+  out[negatives] <- paste0(negative, out[negatives])
   out
 }
