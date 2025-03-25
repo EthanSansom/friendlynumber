@@ -393,6 +393,8 @@ english$suffixes <- c(
   " septenonagintacentillion", " octononagintacentillion", " novenonagintacentillion"
 )
 
+# TODO: Update for lower digits count.
+#
 # These are meant to work with `format_fractional.numeric()`, the output of
 # which should be the correct key to this dictionary.
 english$fractionals <- c(
@@ -425,88 +427,148 @@ english$fractionals <- c(
   `0.777777777777778` = "seven ninths", `0.888888888888889` = "eight ninths"
 )
 
-format_fractional(1:2 / 3)
-format_fractional(1:3 / 4)
-format_fractional(1:4 / 5)
-format_fractional(1:5 / 6)
-format_fractional(1:6 / 7) |> rlang::set_names(nm = _, x = rep("sevenths", 6)) |> dput()
-format_fractional(1:7 / 8) |> rlang::set_names(nm = _, x = rep("eigths", 7)) |> dput()
-format_fractional(1:8 / 9) |> rlang::set_names(nm = _, x = rep("seven ninths", 8)) |> dput()
-
-# functions --------------------------------------------------------------------
-# - `numbers` is expected to be a non-zero positive integer-ish number
-# - `doubles` is expected to be a non-zero positive numeric
-
-# Covers numbers 0-999
-english_hundreds <- function(numbers, suffix = "") {
-  # `as.integer()` allows <bignum_biginteger> to be used as an index, since
-  # it can't normally (e.g. `letters[bignum::biginteger(1)]` is `NA` not "a").
-  paste0(english$hundreds[as.integer(numbers + 1L)], suffix)
+# TODO: Revise this to generate them via `format_fractional()` on 1/3, 1/2, etc.
+get_nice_fractionals <- function() {
+  english$fractionals
 }
 
+# natural numbers --------------------------------------------------------------
+# - `naturals` is expected to be a non-zero positive integer-ish number
+
+# TODO: Call `naturals` -> `naturals`, less confusing.
+
+# Covers naturals 1-999
+english_hundreds <- function(naturals, suffix = "") {
+  # `as.integer()` allows <bignum_biginteger> to be used as an index, since
+  # it can't normally (e.g. `letters[bignum::biginteger(1)]` is `NA` not "a").
+  paste0(english$hundreds[as.integer(naturals + 1L)], suffix)
+}
+
+# TODO: Try a `while` or `for` loop at some point instead of recursion, see if
+# faster for small and large naturals separately.
+#
 # Covers the natural numbers (excluding zero)
-english_naturals <- function(numbers, prefixes, iteration = 1L) {
-  nonzero_numbers <- numbers != 0
-  if (!any(nonzero_numbers)) {
+english_naturals <- function(naturals, prefixes = character(length(naturals)), iteration = 1L) {
+  nonzero_naturals <- naturals != 0
+  if (!any(nonzero_naturals)) {
     return(prefixes)
   }
 
   # We're only going to add prefixes whenever the 100's are empty. Otherwise we
   # get `1,000,000` -> "one million thousand", but we just want "one million".
-  hundreds <- get_hundreds(numbers[nonzero_numbers])
+  hundreds <- get_hundreds(naturals[nonzero_naturals])
   nonzero_hundreds <- hundreds != 0
 
-  prefixes[nonzero_numbers][nonzero_hundreds] <- paste(
+  # TODO: Does this need to return a trailing space? Think about whether we can
+  # make this just return the exact answer we want, to avoid confusion.
+  prefixes[nonzero_naturals][nonzero_hundreds] <- paste(
     english_hundreds(
-      numbers = hundreds[nonzero_hundreds],
+      naturals = hundreds[nonzero_hundreds],
       suffix = english$suffixes[iteration]
     ),
-    prefixes[nonzero_numbers][nonzero_hundreds]
+    prefixes[nonzero_naturals][nonzero_hundreds]
   )
-  numbers <- consume_hundreds(numbers)
-  english_naturals(numbers, prefixes, iteration = iteration + 1L)
+  naturals <- consume_hundreds(naturals)
+  english_naturals(naturals, prefixes, iteration = iteration + 1L)
 }
 
 # This will raise warnings about precision issues for large numbers, which is
 # now what we want since we can steer users towards {bignum} if they need more
 # precision. Try `get_hundreds(100^100)`.
-get_hundreds <- function(numbers) {
-  numbers %% 1000
+get_hundreds <- function(naturals) {
+  naturals %% 1000L
 }
 
-consume_hundreds <- function(numbers) {
-  numbers %/% 1000
+consume_hundreds <- function(naturals) {
+  naturals %/% 1000L
 }
 
-get_fractional <- function(doubles) {
-  # Faster than `doubles %% 1`, and seems to give the same result
-  doubles - trunc(doubles)
-}
-
-get_whole <- function(doubles) {
-  trunc(doubles)
-}
-
-# decimal numbers --------------------------------------------------------------
-# - `decimal_characters` is the output of `format_fractional(<numeric>)`
+# fractional numbers -----------------------------------------------------------
+# - `fractional_characters` is the output of `format_fractional(<numeric>)`
 #   where <numeric> is less than 1
+# - `doubles` is expected to be a non-zero positive numeric
 
-english_decimal <- function(decimal_characters) {
-  n_decimals <- nchar(decimal_characters) - 2L # Adjust for the prefix "0."
-  numbers <- as.numeric(decimal_characters) * 10^n_decimals
+# TODO: Implement. Handles numbers in range (0, 1)
+english_fractionals <- function(fractionals, zero = "zero", nice_fractionals = get_nice_fractionals()) {
+  out <- character(length(fractionals))
+
+  # The number of "english" decimal places is dependent on the number of decimals
+  # shown by `format_fractional()` (as called by `format_number()`). This ensures
+  # that "what you see is what you get".
+  fractional_characters <- format_fractional(fractionals)
+  n_decimals <- nchar(fractional_characters)
+
+  # TODO: Refine
+  zeros <- n_decimals == 0
+  nices <- fractional_characters %in% names(nice_fractionals)
+  fracs <- !zeros & !nices
+
+  # `zeros` occur when we don't have enough precision to represent small `fractionals`
+  out[zeros] <- zero
+  out[nices] <- nice_fractionals[fractional_characters]
+
+  # TODO: Test if we need to trim the leading zeros here
+  # - is it faster? slower?
+  # - does not doing it introduce precision issues?
+  #
+  # `format_fractional()` gives us the trailing digits (e.g. 0.0123 -> "0123")
+  # so we can coerce this to numeric to get the natural number representation.
+  natural_fracs <- as.numeric(sub("^0+", "", fractional_characters[fracs]))
+
+  out[fracs] <- paste0(
+    # `english_naturals()` leaves a space after it's output, so can use `paste0()`
+    english_naturals(natural_fracs),
+    nice_tenillions(n_decimals[fracs]),
+    # "one thousandth" for "0.001" vs. "two thousandths" for "0.002"
+    ifelse(grepl("1$", fractional_characters[fracs]), "th", "ths")
+  )
+  out
+}
+
+# TODO: Implement. Handles numbers in range (0, 1)
+english_fractionals_v2 <- function(fractionals) {
+  # The number of "english" decimal places is dependant on the number of decimals
+  # shown by `format_fractional()` (as called by `format_number()`). This ensures
+  # that "what you see is what you get".
+  fractional_characters <- format_fractional(fractionals)
+  n_decimals <- nchar(fractional_characters)
+
+  # TODO: Add an intervention here where we switch to the nice version if
+  # `nice_fraction <- fractional_characters %in% names(english$fractions)`
+  # out[nice_fraction] <- english$fractions[nice_fraction]
+
+  # Bump the fractional part up to the whole part, trim leftover
+  naturals <- trunc(fractionals * 10^n_decimals) # TODO: This introduces weird error
 
   # `english_naturals()` leaves a space after it's output, so can use `paste0()`
   paste0(
-    english_naturals(numbers, prefixes = character(length(numbers))),
+    english_naturals(naturals),
     nice_tenillions(n_decimals),
     # "one thousandth" for "0.001" vs. "two thousandths" for "0.002"
-    ifelse(grepl("1$", decimal_characters), "th", "ths")
+    ifelse(grepl("1$", fractional_characters), "th", "ths")
+  )
+}
+
+english_fractionals_v1 <- function(fractionals) {
+  # TODO: This will be "0." if we have too many zeros (e.g. `0.00000000000000000001`),
+  # so deal with that. It is allowed, and the user can prevent it by increasing the
+  # precision.
+  fractional_characters <- format_fractional(fractionals)
+  n_decimals <- nchar(fractional_characters) - 2L # Adjust for the prefix "0."
+  naturals <- as.numeric(fractional_characters) * 10^n_decimals
+
+  # `english_naturals()` leaves a space after it's output, so can use `paste0()`
+  paste0(
+    english_naturals(naturals, prefixes = character(length(naturals))),
+    nice_tenillions(n_decimals),
+    # "one thousandth" for "0.001" vs. "two thousandths" for "0.002"
+    ifelse(grepl("1$", fractional_characters), "th", "ths")
   )
 }
 
 # Turns "0.0123" into "zero one two three" as in "zero point zero one two three"
-english_point <- function(decimal_characters, zero = "zero") {
-  fractional_characters <- substr(decimal_characters, 3, nchar(decimal_characters))
+english_points <- function(fractionals, zero = "zero") {
+  fractional_characters <- format_fractional(fractionals)
   trimws(
     gsub("0", paste0(trimws(zero), " "),
       gsub("1", "one ",
@@ -518,4 +580,35 @@ english_point <- function(decimal_characters, zero = "zero") {
                               gsub("7", "seven ",
                                   gsub("8", "eigth ",
                                       gsub("9", "nine ", fractional_characters)))))))))))
+}
+
+# Without `wholes` this is `doubles - trunc(doubles)`, but since I always use
+# this with `get_whole()` there's no reason to re-compute.
+get_fractional <- function(doubles, wholes) {
+  # Faster than `doubles %% 1`, and seems to give the same result
+  doubles - wholes
+}
+
+get_whole <- function(doubles) {
+  trunc(doubles)
+}
+
+# helpers ----------------------------------------------------------------------
+
+# Add an "and" before the last number if in 1:99 (e.g. "one thousand and one"
+# and not "one thousand and one hundred")
+and <- function(english_numbers) {
+  last_number <- sub(".*\\s", "", english_numbers)
+  needs_an_and <- last_number %in% english$hundreds[1:99 + 1]
+
+  english_numbers[needs_an_and] <- sub(
+    pattern = "^(.*) (\\S+)$",
+    replacement =  "\\1 and \\2",
+    x = english_numbers[needs_an_and]
+  )
+  english_numbers
+}
+
+unhypenate <- function(english_numbers) {
+  sub("-", " ", english_numbers)
 }
