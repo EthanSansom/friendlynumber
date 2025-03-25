@@ -96,7 +96,7 @@ format_fractional <- function(x, ...) {
 
 #' @export
 format_fractional.numeric <- function(x) {
-  fmt <- paste0("%.", getOption("friendlynumber.numeric.digits"), "f")
+  fmt <- paste0("%.", getOption("friendlynumber.numeric.digits", 7), "f")
   out <- sub("0+$", "", sprintf(fmt, x))
   # Remove the leading "0.", we only want the decimal components
   substr(out, 3, nchar(out))
@@ -107,7 +107,7 @@ format_fractional.bignum_bigfloat <- function(x) {
   out <- sub("0+$", "", format(
     x,
     notation = "dec",
-    digits = getOption("friendlynumber.bigfloat.digits")
+    digits = getOption("friendlynumber.bigfloat.digits", 7)
   ))
   substr(out, 3, nchar(out))
 }
