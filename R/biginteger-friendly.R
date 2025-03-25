@@ -17,41 +17,16 @@ biginteger_friendly <- function(
     and = FALSE,
     hyphenate = TRUE
 ) {
-
-  out <- character(length(numbers))
-
-  infinites <- is.infinite(numbers)
-  missings <- is.na(numbers)
-  zeros <- !missings & numbers == 0
-  negatives <- !missings & numbers < 0
-
-  # `is.na()` is TRUE for NaN
-  nans <- is.nan(numbers)
-  nas <- !nans & missings
-
-  out[infinites] <- inf
-  out[nas] <- na
-  out[nans] <- nan
-  out[zeros] <- zero
-
-  needs_englishifying <- !(infinites | missings | zeros)
-  if (!any(needs_englishifying)) {
-    out[negatives] <- paste(negative, inf)
-    return(out)
-  }
-
-  remaining_numbers <- abs(numbers[needs_englishifying])
-  if (all(remaining_numbers < 1000)) {
-    out[needs_englishifying] <- english_hundreds(remaining_numbers)
-    out[negatives] <- paste(negative, out[negatives])
-    return(out)
-  }
-
-  out[needs_englishifying] <- english_naturals(remaining_numbers)
-  out[negatives] <- paste(negative, out[negatives])
-
-  out <- trimws(out)
-  if (and) out <- and(out)
-  if (!hyphenate) out <- unhypenate(out)
-  out
+  # It looks like `integer_friendly()` "just works" for <bignum_biginteger>, but
+  # we'll have to see if there are any edge cases that require differentiation
+  integer_friendly(
+    numbers,
+    zero = zero,
+    na = na,
+    nan = nan,
+    inf = inf,
+    negative = negative,
+    and = and,
+    hyphenate = hyphenate
+  )
 }
