@@ -1,3 +1,6 @@
+# TODO: I think this should expect positive integerish numbers, (e.g. 0, 1, 2, ...),
+# as should all of the `n*_friendly` functions.
+
 nth_friendly <- function(
     numbers,
     zero = "zeroth",
@@ -37,11 +40,3 @@ nth_friendly <- function(
   out[needs_englishifying] <- sub("3th$", "3rd", sub("2th$", "2nd", sub("(?<!1)1th$", "1st", out[needs_englishifying], perl = TRUE)))
   trimws(out)
 }
-
-
-# We'll need a different method for <biginteger>
-# format(bignum::biginteger("1000000000000"), big.mark = ",")
-
-
-
-
