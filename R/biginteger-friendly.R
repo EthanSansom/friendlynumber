@@ -2,9 +2,9 @@ biginteger_friendly <- function(
     numbers,
     zero = "zero",
     na = "missing",
-    nan = "not a number",
+    nan = "not a number", # Vestigial, since <bignum_biginteger> is never NaN
     inf = "infinity",
-    negative = "negative",
+    negative = "negative ",
     and = FALSE,
     hyphenate = TRUE
 ) {
