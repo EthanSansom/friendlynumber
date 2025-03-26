@@ -4,11 +4,14 @@ ordinal_friendly <- function(
     na = "missing",
     nan = "not a number",
     inf = "infinity",
-    negative = "negative",
+    negative = "negative ",
     and = FALSE,
     hyphenate = TRUE
 ) {
-  english_ordinals <- paste0(integer_friendly(
+  if (length(numbers) == 0) {
+    return(character(0))
+  }
+  english_ordinals <- paste0(integerish_friendly(
     numbers = numbers,
     zero = zero,
     na = na,
