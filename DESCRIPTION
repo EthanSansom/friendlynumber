@@ -14,5 +14,6 @@ URL: https://github.com/EthanSansom/friendlynumber
 BugReports: https://github.com/EthanSansom/friendlynumber/issues
 Suggests: 
     bignum,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Config/testthat/edition: 3
