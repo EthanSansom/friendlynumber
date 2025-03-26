@@ -1,5 +1,3 @@
-# Note, I'm not testing `illions()`, it does the same thing but doesn't have the
-# nice (standard) names.
 test_that("`nice_illions()` works", {
   # Thank you to Steve Olsen: https://www.olsenhome.com/bignumbers/
   one_thousand_and_four_illions <- c(
@@ -432,4 +430,29 @@ test_that("`nice_illions()` works", {
   # https://sites.google.com/site/pointlesslargenumberstuff/home/1/extendedillions1
   # expect_equal(nice_illions(3003006  / 3), "millibillinillion")
   # expect_equal(nice_illions(6030 / 3), "billidecillion")
+})
+
+test_that("`illions()` works", {
+  expect_snapshot(illions(1:1002))
+  expect_equal(illions(6000000003 / 3), "billinillinillinillion")
+  expect_equal(illions(3000000000003 / 3), "millinillinillinillinillion")
+  expect_equal(illions(3000000000000003 / 3), "millinillinillinillinillinillion")
+})
+
+test_that("`nice_tenillions()` works", {
+  expect_snapshot(nice_tenillions(1:100))
+  expect_equal(nice_tenillions(6000000003), "billinillinillinillion")
+  expect_equal(nice_tenillions(6000000003 + 1), "ten billinillinillinillion")
+  expect_equal(nice_tenillions(6000000003 + 2), "hundred billinillinillinillion")
+  expect_equal(nice_tenillions(3000000000003), "millinillinillinillinillion")
+  expect_equal(nice_tenillions(3000000000000003), "millinillinillinillinillinillion")
+})
+
+test_that("`tenillions()` works", {
+  expect_snapshot(tenillions(1:100))
+  expect_equal(tenillions(6000000003), "billinillinillinillion")
+  expect_equal(tenillions(6000000003 + 1), "ten billinillinillinillion")
+  expect_equal(tenillions(6000000003 + 2), "hundred billinillinillinillion")
+  expect_equal(tenillions(3000000000003), "millinillinillinillinillion")
+  expect_equal(tenillions(3000000000000003), "millinillinillinillinillinillion")
 })
