@@ -485,29 +485,6 @@ get_english_suffix <- function(iteration) {
   }
 }
 
-# See whether using `get_english_suffix()` for small numbers makes a differnce (Answer: it does not)
-if (FALSE) {
-  # NOTE: The difference between using the wrapper and directly indexing `english$suffixes`
-  # is negligable in absolute terms.
-  bench::mark(
-    english$suffixes[100],
-    get_english_suffix(100)
-  )[1:7]
-  # expression                 min   median `itr/sec` mem_alloc `gc/sec` n_itr
-  #   <bch:expr>            <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int>
-  # 1 english$suffixes[100]   82.1ns    164ns  4100704.        0B        0 10000
-  # 2 get_suffix(100)          246ns    328ns  2173601.        0B        0 10000
-
-  # NOTE: For known suffixes though (numbers < 1000^201) it is *much* faster to
-  # use `english$suffixes[100]` than `nice_illions(100)`, so we shouldn't rely on
-  # just `nice_illions()`.
-  bench::mark(
-    english$suffixes[100],
-    nice_illions(100),
-    check = FALSE
-  )
-}
-
 # This will raise warnings about precision issues for large numbers, which is
 # now what we want since we can steer users towards {bignum} if they need more
 # precision. Try `get_hundreds(100^100)`.
