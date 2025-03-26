@@ -1,5 +1,3 @@
-# functions --------------------------------------------------------------------
-
 numeric_friendly <- function(
     numbers,
     zero = "zero",
@@ -40,9 +38,11 @@ numeric_friendly <- function(
   remaining_numbers <- abs(numbers[needs_englishifying])
   remaining_wholes <- trunc(remaining_numbers)
 
-  # TODO: These only actually need to be equal up to a certain precision, might
-  # be better to do `remaining_numbers - remaining_wholes < get_epsilon()`, or
-  # we could round `remaining_numbers` to the correct digits first.
+  # These only need to be equal up to a certain precision. One of these may work:
+  # - `remaining_numbers - remaining_wholes < get_epsilon()`
+  # - `round(remaining_numbers, get_digits()) == remaining_wholes`
+  # `get_digits()/get_epsilon()` depend on the `friendlynumber.*.digits` option.
+  # Today, 0's from imprecision are caught later within `english_fractionals()`.
   if (all(remaining_numbers == remaining_wholes)) {
     if (all(remaining_wholes < 1000)) {
       out[needs_englishifying] <- after_format(
@@ -87,9 +87,9 @@ numeric_friendly <- function(
       and = and,
       hyphenate = hyphenate
     ),
-    # Later subbed out for `decimal`. We check for trailing fractional zero's
-    # (resulting from insufficient precision) using `sub()`, which errors if
-    # `decimal` is a regex metacharacter.
+    # "<decimal>" is later replaced with `decimal`. This is needed as we check
+    # for trailing fractional zero's (resulting from insufficient precision)
+    # using `sub()`, which errors if `decimal` is a regex metacharacter.
     "<decimal>",
     english_fractionals(
       remaining_fractionals[is_compound],
@@ -114,20 +114,4 @@ numeric_friendly <- function(
   )
 
   out
-}
-
-# Which is faster, `all(x == y)` or `all.equal(x, y)` (looks like `all()` wins)
-if (FALSE) {
-
-  ints <- ints_off <- 1:10000
-  ints_off[10000] <- 0
-  bench::mark(
-    all(ints == ints),
-    all.equal(ints, ints)
-  )
-  bench::mark(
-    all(ints == ints_off),
-    isTRUE(all.equal(ints, ints_off))
-  )
-
 }
