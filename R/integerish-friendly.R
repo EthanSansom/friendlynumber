@@ -1,5 +1,4 @@
-# TODO: Rename -> integerish_friendly
-integer_friendly <- function(
+integerish_friendly <- function(
     numbers,
     zero = "zero",
     na = "missing",
