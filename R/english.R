@@ -1,3 +1,26 @@
+# comments ---------------------------------------------------------------------
+
+# Here's a potentially faster and more precise way to do this (that I might try)
+# that uses the character representation of the number instead.
+#
+# Suppose our number is 1000000 (one million).
+# 1. Use `sprintf()`, `format()`, or other to convert to character: "1000000"
+# 2. Front pad with 0's so `nchar(x)` is a multiple of three: "001000000"
+# 3. Process the number using a revised `english_naturals()`
+# - `consume_hundreds()` becomes `substr(x, 3, nchar(x))` (still vectorized)
+# - `get_hundreds()` becomes `substr(x, 1, 3)` (still vectorized)
+# - `english$hundreds` is now a named dictionary "001" = "one", "101" = "one hundred and one"
+# - The number of suffixes (-illions) required is `nchar(x) %/% 3`
+#   - Conveniently, every suffix required can be made by `illions(seq(max(nchar(x) %/% 3)))`
+#
+# There might be some additional speed improvements because for each number we
+# now know the required suffixes in advance (using `nchar()`).
+#
+# A `cumber_friendly()` (character-number) function for arbitrary precision would
+# then be trivial.
+#
+# This might also be fun to try in C.
+
 # constants --------------------------------------------------------------------
 english <- new.env(parent = emptyenv())
 
@@ -322,6 +345,13 @@ english$hundreds <- c(
   "nine hundred ninety-seven", "nine hundred ninety-eight", "nine hundred ninety-nine"
 )
 
+english$character_hundreds <- local({
+  nms <- formatC(0:999, width = 3, flag = 0)
+  out <- english$hundreds
+  names(out) <- nms
+  out
+})
+
 # Generated via `nice_illions(1:200)`. Maxes out at 1000^200. On my machine
 # `.Machine$double.xmax = 1.797693e+308` is on the same order as 1000^{102.7},
 # so we're fine for most realistic cases.
@@ -494,6 +524,93 @@ get_hundreds <- function(naturals) {
 
 consume_hundreds <- function(naturals) {
   naturals %/% 1000L
+}
+
+# character test ---------------------------------------------------------------
+
+# TODO: Look into speed-ups from:
+# 1. The fact that we know the number of digits immediately
+# 2. Not recursing and minimizing the number of substr, paste, nchar calls
+
+# Covers the natural numbers (excluding zero)
+english_naturals_chr <- function(naturals, and = FALSE, hyphenate = TRUE) {
+  out <- english_naturals_recursive_chr(
+    naturals = pad_naturals_chr(naturals),
+    prefixes = character(length(naturals)),
+    iteration = 1L
+  )
+  after_format(trimws(out), and = and, hyphenate = hyphenate)
+}
+
+# Front pad so that `nchar(naturals)` multiples of 3
+pad_naturals_chr <- function(naturals) {
+  paste0(c("", "00", "0")[(nchar(naturals) %% 3) + 1], naturals)
+}
+
+# Covers naturals 1-999
+english_hundreds_chr <- function(naturals, suffix = "") {
+  paste0(english$character_hundreds[naturals], suffix)
+}
+
+english_naturals_recursive_chr <- function(naturals, prefixes, iteration) {
+
+  nonzero_naturals <- naturals != ""
+  if (!any(nonzero_naturals)) {
+    return(prefixes)
+  }
+
+  n_char <- nchar(naturals)
+  hundreds <- get_hundreds_chr(naturals[nonzero_naturals], n_char[nonzero_naturals])
+  nonzero_hundreds <- hundreds != "000"
+
+  prefixes[nonzero_naturals][nonzero_hundreds] <- paste(
+    english_hundreds_chr(
+      naturals = hundreds[nonzero_hundreds],
+      suffix = get_english_suffix(iteration)
+    ),
+    prefixes[nonzero_naturals][nonzero_hundreds]
+  )
+  naturals <- consume_hundreds_chr(naturals, n_char)
+  english_naturals_recursive_chr(naturals, prefixes, iteration = iteration + 1L)
+}
+
+# TODO: Fix, I think this is the problem!!
+get_hundreds_chr <- function(naturals, n_char) {
+  # nchar <- nchar(naturals)
+  substr(naturals, n_char - 2, n_char)
+}
+
+consume_hundreds_chr <- function(naturals, n_char) {
+  substr(naturals, 0, n_char - 3)
+}
+
+# NOTE: These are pretty competitive. There might be some more speed to squeeze
+# out of the character version using the fact that we know in advance the number
+# of digits in each number. We really only need to do `nchar(numbers)` once to know:
+# - which numbers are below 1000
+# - which suffixes does each number need (and which set do all numbers need)
+if (FALSE) {
+  load_all()
+  x_num <- 1:10000
+  x_chr <- as.character(1:10000)
+  bench::mark(
+    english_naturals_chr(x_chr),
+    english_naturals(x_num)
+  )
+}
+
+if (FALSE) {
+  # A really fast string version would probably work best in C++, since we'd
+  # want to use for loops.
+
+  x <- sprintf("%i", c(1, 100, 1000, 10000, 1000000))
+
+  n_char <- nchar(x)
+
+  padded <- paste0(c("", "00", "0")[(n_char %% 3) + 1], x)
+  n_chunks <- nchar(padded) %/% 3
+
+  chunks <- gsub("^.{3}$", "\\1", padded)
 }
 
 # fractional numbers -----------------------------------------------------------
