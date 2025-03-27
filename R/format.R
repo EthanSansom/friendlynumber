@@ -7,17 +7,17 @@ format_number <- function(x, ...) {
 }
 
 #' @export
-format_number.integer <- function(x, bigmark = ",") {
+format_number.integer <- function(x, bigmark = ",", ...) {
   format_whole(x, bigmark = bigmark)
 }
 
 #' @export
-format_number.bignum_biginteger <- function(x, bigmark = ",") {
+format_number.bignum_biginteger <- function(x, bigmark = ",", ...) {
   format_whole(x, bigmark = bigmark)
 }
 
 #' @export
-format_number.numeric <- function(x, bigmark = ",") {
+format_number.numeric <- function(x, bigmark = ",", ...) {
   x_trunc <- trunc(x)
   whole <- format_whole(x_trunc, bigmark = bigmark)
   fractional <- paste0(".", format_fractional(x - x_trunc))
@@ -27,7 +27,7 @@ format_number.numeric <- function(x, bigmark = ",") {
 }
 
 #' @export
-format_number.bignum_bigfloat <- function(x, bigmark = ",") {
+format_number.bignum_bigfloat <- function(x, bigmark = ",", ...) {
   x_trunc <- trunc(x)
   whole <- format_whole(x_trunc, bigmark = bigmark)
   fractional <- paste0(".", format_fractional(x - x_trunc))
@@ -51,17 +51,17 @@ format_whole <- function(x, ...) {
 }
 
 #' @export
-format_whole.integer <- function(x, bigmark = ",") {
+format_whole.integer <- function(x, bigmark = ",", ...) {
   format(x, scientific = FALSE, big.mark = bigmark)
 }
 
 #' @export
-format_whole.numeric <- function(x, bigmark = ",") {
+format_whole.numeric <- function(x, bigmark = ",", ...) {
   format(x, scientific = FALSE, big.mark = bigmark) # TODO: Maybe `sprintf()` instead, see what's best
 }
 
 #' @export
-format_whole.bignum_bigfloat <- function(x, bigmark = ",") {
+format_whole.bignum_bigfloat <- function(x, bigmark = ",", ...) {
   out <- format(x, notation = "dec")
   if (bigmark != "") {
     # Use a "," initially in case `bigmark` contains a control sequence
@@ -72,7 +72,7 @@ format_whole.bignum_bigfloat <- function(x, bigmark = ",") {
 }
 
 #' @export
-format_whole.bignum_biginteger <- function(x, bigmark = ",") {
+format_whole.bignum_biginteger <- function(x, bigmark = ",", ...) {
   out <- format(x, notation = "dec")
   if (bigmark != "") {
     out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
@@ -95,7 +95,7 @@ format_fractional <- function(x, ...) {
 }
 
 #' @export
-format_fractional.numeric <- function(x) {
+format_fractional.numeric <- function(x, ...) {
   fmt <- paste0("%.", getOption("friendlynumber.numeric.digits", 7), "f")
   out <- sub("0+$", "", sprintf(fmt, x))
   # Remove the leading "0.", we only want the decimal components
@@ -103,7 +103,7 @@ format_fractional.numeric <- function(x) {
 }
 
 #' @export
-format_fractional.bignum_bigfloat <- function(x) {
+format_fractional.bignum_bigfloat <- function(x, ...) {
   out <- sub("0+$", "", format(
     x,
     notation = "dec",
