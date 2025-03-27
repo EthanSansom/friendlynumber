@@ -341,13 +341,6 @@ english$hundreds <- c(
   "nine hundred ninety-seven", "nine hundred ninety-eight", "nine hundred ninety-nine"
 )
 
-english$character_hundreds <- local({
-  nms <- formatC(0:999, width = 3, flag = 0)
-  out <- english$hundreds
-  names(out) <- nms
-  out
-})
-
 # Generated via `nice_illions(1:200)`. Maxes out at 1000^200. On my machine
 # `.Machine$double.xmax = 1.797693e+308` is on the same order as 1000^{102.7},
 # so we're fine for most realistic cases.
