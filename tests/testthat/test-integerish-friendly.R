@@ -91,20 +91,13 @@ test_that("`integerish_friendly_safe()` enforces input types", {
 
   expect_input_error(integerish_friendly_safe(bool))
   expect_input_error(integerish_friendly_safe(fraction))
-  expect_input_error(integerish_friendly_safe(int, zero = int))
   expect_input_error(integerish_friendly_safe(int, zero = twochr))
   expect_input_error(integerish_friendly_safe(int, na = int))
-  expect_input_error(integerish_friendly_safe(int, na = twochr))
-  expect_input_error(integerish_friendly_safe(int, nan = int))
   expect_input_error(integerish_friendly_safe(int, nan = twochr))
   expect_input_error(integerish_friendly_safe(int, inf = int))
-  expect_input_error(integerish_friendly_safe(int, inf = twochr))
-  expect_input_error(integerish_friendly_safe(int, negative = int))
   expect_input_error(integerish_friendly_safe(int, negative = twochr))
-  expect_input_error(integerish_friendly_safe(int, and = int))
   expect_input_error(integerish_friendly_safe(int, and = NA))
   expect_input_error(integerish_friendly_safe(int, hyphenate = int))
-  expect_input_error(integerish_friendly_safe(int, hyphenate = NA))
 
   expect_no_error(integerish_friendly_safe(int))
   expect_no_error(

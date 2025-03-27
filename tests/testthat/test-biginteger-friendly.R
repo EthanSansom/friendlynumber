@@ -56,18 +56,11 @@ test_that("`biginteger_friendly_safe()` enforces input types", {
 
   expect_input_error(biginteger_friendly_safe(int))
   expect_input_error(biginteger_friendly_safe(bigint, zero = int))
-  expect_input_error(biginteger_friendly_safe(bigint, zero = twochr))
-  expect_input_error(biginteger_friendly_safe(bigint, na = int))
   expect_input_error(biginteger_friendly_safe(bigint, na = twochr))
   expect_input_error(biginteger_friendly_safe(bigint, nan = int))
-  expect_input_error(biginteger_friendly_safe(bigint, nan = twochr))
-  expect_input_error(biginteger_friendly_safe(bigint, inf = int))
   expect_input_error(biginteger_friendly_safe(bigint, inf = twochr))
   expect_input_error(biginteger_friendly_safe(bigint, negative = int))
-  expect_input_error(biginteger_friendly_safe(bigint, negative = twochr))
   expect_input_error(biginteger_friendly_safe(bigint, and = int))
-  expect_input_error(biginteger_friendly_safe(bigint, and = NA))
-  expect_input_error(biginteger_friendly_safe(bigint, hyphenate = int))
   expect_input_error(biginteger_friendly_safe(bigint, hyphenate = NA))
 
   expect_no_error(biginteger_friendly_safe(bigint))

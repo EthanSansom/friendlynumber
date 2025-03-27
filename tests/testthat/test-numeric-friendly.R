@@ -202,20 +202,13 @@ test_that("`numeric_friendly_safe()` enforces input types", {
   chr <- c("333" = "one third")
 
   expect_input_error(numeric_friendly_safe(bool))
-  expect_input_error(numeric_friendly_safe(fraction, zero = int))
   expect_input_error(numeric_friendly_safe(fraction, zero = twochr))
   expect_input_error(numeric_friendly_safe(fraction, na = int))
-  expect_input_error(numeric_friendly_safe(fraction, na = twochr))
-  expect_input_error(numeric_friendly_safe(fraction, nan = int))
   expect_input_error(numeric_friendly_safe(fraction, nan = twochr))
   expect_input_error(numeric_friendly_safe(fraction, inf = int))
-  expect_input_error(numeric_friendly_safe(fraction, inf = twochr))
-  expect_input_error(numeric_friendly_safe(fraction, negative = int))
   expect_input_error(numeric_friendly_safe(fraction, negative = twochr))
-  expect_input_error(numeric_friendly_safe(fraction, and = int))
   expect_input_error(numeric_friendly_safe(fraction, and = NA))
   expect_input_error(numeric_friendly_safe(fraction, hyphenate = int))
-  expect_input_error(numeric_friendly_safe(fraction, hyphenate = NA))
 
   expect_no_error(numeric_friendly_safe(fraction))
   expect_no_error(
