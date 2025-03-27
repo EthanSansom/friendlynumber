@@ -1,30 +1,114 @@
-# TODO: Like https://nombre.rossellhayes.com/reference/collective.html
+quantifier_friendly <- function(
+    numbers,
+    one = "the",
+    two = "both",
+    zero = "no",
+    na = "a missing",
+    nan = "an undefined",
+    inf = "every",
+    negative = "negative ",
+    and = FALSE,
+    hyphenate = TRUE,
+    bigmark = TRUE,
+    max_friendly = 100
+) {
 
-# zero = "none"
-# inf = "all"
-# na = "an unknown amount"
-# nan = "an undefined amount"
+  out <- character(length(numbers))
 
-# TODO: Wait no, this is just a wrapper for `integer_friendly()`, which I don't
-# think you need to name.
+  infinites <- is.infinite(numbers)
+  missings <- is.na(numbers)
+  zeros <- !missings & numbers == 0
+  negatives <- !missings & numbers < 0
+  nans <- is.nan(numbers)
+  nas <- !nans & missings
 
-# nof_friendly(c(0:5, NA))
-# "none" "one" "two" "three", "five", "an unknown amount"
-# - provide a suffix = "", so you can set to suffix = "of". Or maybe just "of = TRUE/FALSE"
-#
+  out[infinites] <- inf
+  out[nas] <- na
+  out[nans] <- nan
+  out[zeros] <- zero
 
-# IMPORTANT!!
-# TODO: The thing we actually want is `quantity_friendly()`.
+  # -1 and -2 shouldn't be included, `-1` -> "negative the" doesn't make sense
+  ones <- !missings & numbers == 1
+  twos <- !missings & numbers == 2
+  out[ones] <- one
+  out[twos] <- two
 
-# na = "an unknown amount of"
-# nan = "an undefined amount of"
-# zero = "no"
-# 1 -> "a" (could be "the")
-# 2 -> "both"
-# 3 -> "all three"
-# ...
-# 1000 -> "all 1,000" (allow a threshold setting)
-# Inf -> "all"
+  # Numbers above `max_friendly` get non-english names, e.g. `1000` -> "all 1,000"
+  numbers <- abs(numbers)
+  bigs <- !(missings | infinites) & numbers > max_friendly
+  out[bigs] <- format_whole(numbers[bigs], bigmark = if (bigmark) "," else "")
 
-# max_friendly = 99 (threshold before we use numbers to describe things)
-# - "all ninety-nine" vs. "all 100"
+  needs_englishifying <- !(infinites | missings | zeros | ones | twos | bigs)
+  if (!any(needs_englishifying)) {
+    # Negate before the "all", e.g. `-5` -> "all negative five" not "negative all five"
+    out[negatives] <- paste0(negative, out[negatives])
+    out[bigs] <- paste("all", out[bigs])
+    return(out)
+  }
+
+  remaining_numbers <- abs(numbers[needs_englishifying])
+  needs_all <- needs_englishifying | bigs
+
+  if (all(remaining_numbers < 1000)) {
+    out[needs_englishifying] <- after_format(
+      english_hundreds(remaining_numbers),
+      and = and,
+      hyphenate = hyphenate
+    )
+    out[negatives] <- paste0(negative, out[negatives])
+    out[needs_all] <- paste("all", out[needs_all])
+    return(out)
+  }
+
+  out[needs_englishifying] <- english_naturals(
+    remaining_numbers,
+    and = and,
+    hyphenate = hyphenate
+  )
+  out[negatives] <- paste0(negative, out[negatives])
+  out[needs_all] <- paste("all", out[needs_all])
+  out
+}
+
+quantifier_friendly_safe <- function(
+    numbers,
+    one = "the",
+    two = "both",
+    zero = "no",
+    na = "a missing",
+    nan = "an undefined",
+    inf = "every",
+    negative = "negative ",
+    and = FALSE,
+    hyphenate = TRUE,
+    bigmark = TRUE,
+    max_friendly = 100
+) {
+  numbers <- check_is_whole(numbers)
+  one <- check_is_string(one)
+  two <- check_is_string(two)
+  zero <- check_is_string(zero)
+  na <- check_is_string(na)
+  nan <- check_is_string(nan)
+  inf <- check_is_string(inf)
+  negative <- check_is_string(negative)
+  and <- check_is_bool(and)
+  hyphenate <- check_is_bool(hyphenate)
+  bigmark <- check_is_bool(bigmark)
+  max_friendly <- check_is_number(max_friendly)
+
+  quantifier_friendly(
+    numbers = numbers,
+    one = one,
+    two = two,
+    zero = zero,
+    na = na,
+    nan = nan,
+    inf = inf,
+    negative = negative,
+    and = and,
+    hyphenate = hyphenate,
+    bigmark = bigmark,
+    max_friendly = max_friendly
+  )
+}
