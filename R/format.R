@@ -36,7 +36,7 @@ format_number.bignum_bigfloat <- function(x, bigmark = ",", ...) {
   fractional <- paste0(".", format_fractional(x - x_trunc))
   # Removes fractional part if fractional component is NA, NaN, Inf, -Inf, or 0
   fractional[nchar(fractional) == 1 | fractional %in% c(".NA", ".N")] <- ""
-  trimws(paste0(whole, fractional))
+  paste0(whole, fractional)
 }
 
 #' @export
@@ -65,7 +65,7 @@ format_whole.integer <- function(x, bigmark = ",", ...) {
 format_whole.numeric <- function(x, bigmark = ",", ...) {
   # Using `format()` here since `sprintf("%i", ...)` can't handle numbers
   # outside of the maximum integer
-  format(x, scientific = FALSE, big.mark = bigmark)
+  format(x, scientific = FALSE, big.mark = bigmark, trim = TRUE)
 }
 
 #' @export
