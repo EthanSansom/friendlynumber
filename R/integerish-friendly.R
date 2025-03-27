@@ -57,14 +57,23 @@ integerish_friendly_safe <- function(
     and = FALSE,
     hyphenate = TRUE
   ) {
+  numbers <- check_is_whole(numbers)
+  zero <- check_is_string(zero)
+  na <- check_is_string(na)
+  nan <- check_is_string(nan)
+  inf <- check_is_string(inf)
+  negative <- check_is_string(negative)
+  and <- check_is_bool(and)
+  hyphenate <- check_is_bool(hyphenate)
+
   integerish_friendly(
-    check_is_whole(numbers),
-    zero = check_is_string(zero),
-    na = check_is_string(na),
-    nan = check_is_string(nan),
-    inf = check_is_string(inf),
-    negative = check_is_string(negative),
-    and = check_is_bool(and),
-    hyphenate = check_is_bool(hyphenate)
+    numbers = numbers,
+    zero = zero,
+    na = na,
+    nan = nan,
+    inf = inf,
+    negative = negative,
+    and = and,
+    hyphenate = hyphenate
   )
 }
