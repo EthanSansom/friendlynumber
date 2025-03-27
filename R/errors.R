@@ -5,12 +5,23 @@ stop_unimplemented_method <- function(x, method) {
   )
 }
 
-check_is_type <- function(x, is_type, must, null_ok = FALSE, x_name = arg_name(x)) {
+check_is_type <- function(x, is_type, expected_type, null_ok = FALSE, x_name = arg_name(x)) {
   if ((is.null(x) && null_ok) || is_type(x)) {
     return(x)
   }
   friendlynumber_stop(
-    message = must_be_not(x, x_name, must = must),
+    message = must_be_not(x, x_name, must = expected_type),
+    class = "friendlynumber_error_input_type"
+  )
+}
+
+check_is_class <- function(x, is_class, expected_class, x_name = arg_name(x)) {
+  if (is_class(x)) {
+    return(x)
+  }
+  x_class <- class(x)[1]
+  friendlynumber_stop(
+    message = paste0("`", x_name, "` must be of class <",  expected_class, ">, not <", x_class, ">."),
     class = "friendlynumber_error_input_type"
   )
 }
@@ -35,27 +46,15 @@ check_is_bool <- function(x, x_name = arg_name(x)) {
   )
 }
 
-# TODO: Use `check_is_type()`
-#
-# check_is_numeric <- function(x, x_name = arg_name(x)) {
-#   if (is.numeric(x)) {
-#     return(x)
-#   }
-#   friendlynumber_stop(
-#     message = must_be_not(x, x_name, must = "a numeric vector"),
-#     class = "friendlynumber_error_input_type"
-#   )
-# }
-#
-# check_is_integer <- function(x, x_name = arg_name(x)) {
-#   if (is.integer(x)) {
-#     return(x)
-#   }
-#   friendlynumber_stop(
-#     message = must_be_not(x, x_name, must = "an integer vector"),
-#     class = "friendlynumber_error_input_type"
-#   )
-# }
+check_is_number <- function(x, x_name = arg_name(x)) {
+  if (is_number(x)) {
+    return(x)
+  }
+  friendlynumber_stop(
+    message = must_be_not(x, x_name, must = "a number", length = TRUE),
+    class = "friendlynumber_error_input_type"
+  )
+}
 
 check_is_whole <- function(x, x_name = arg_name(x)) {
   if (is_whole(x)) {
@@ -81,6 +80,10 @@ is_bool <- function(x) {
 
 is_string <- function(x) {
   is.character(x) && length(x) == 1 && !anyNA(x)
+}
+
+is_number <- function(x) {
+  is.numeric(x) && length(x) == 1 && !anyNA(x)
 }
 
 # From `chk::chk_whole_numeric()`
