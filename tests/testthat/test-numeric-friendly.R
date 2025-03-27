@@ -207,8 +207,12 @@ test_that("`numeric_friendly_safe()` enforces input types", {
   expect_input_error(numeric_friendly_safe(fraction, nan = twochr))
   expect_input_error(numeric_friendly_safe(fraction, inf = int))
   expect_input_error(numeric_friendly_safe(fraction, negative = twochr))
+  expect_input_error(numeric_friendly_safe(fraction, negative = int))
   expect_input_error(numeric_friendly_safe(fraction, and = NA))
   expect_input_error(numeric_friendly_safe(fraction, hyphenate = int))
+  expect_input_error(numeric_friendly_safe(fraction, and_fractional = NA))
+  expect_input_error(numeric_friendly_safe(fraction, hyphenate_fractional = int))
+  expect_input_error(numeric_friendly_safe(fraction, english_fractions = int))
 
   expect_no_error(numeric_friendly_safe(fraction))
   expect_no_error(
@@ -218,6 +222,7 @@ test_that("`numeric_friendly_safe()` enforces input types", {
       na = string,
       nan = string,
       negative = string,
+      decimal = string,
       and = bool,
       hyphenate = bool,
       and_fractional = bool,
