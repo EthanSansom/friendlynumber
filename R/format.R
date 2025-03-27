@@ -18,12 +18,25 @@ format_number.bignum_biginteger <- function(x, bigmark = ",", ...) {
 
 #' @export
 format_number.numeric <- function(x, bigmark = ",", ...) {
+  out <- character(length(x))
   x_trunc <- trunc(x)
-  whole <- format_whole(x_trunc, bigmark = bigmark)
-  fractional <- paste0(".", format_fractional(x - x_trunc))
-  # Removes fractional part if fractional component is NA, NaN, Inf, -Inf, or 0
+
+  # Handle `NaN` and `Inf` specially since `format_whole()` expects an integerish
+  # value and `NaN/Inf` are numeric only.
+  # nan <- is.nan(x)
+  # inf <- is.infinite(x)
+  # out[nan] <- "NaN"
+  # out[inf] <- ifelse(x[inf] < 0, "-Inf", "Inf")
+
+  # Format the whole part and the fractional part separately
+  needs_formatting <- TRUE # !(nan | inf)
+  whole <- format_whole(x_trunc[needs_formatting], bigmark = bigmark)
+  fractional <- paste0(".", format_fractional(x[needs_formatting] - x_trunc[needs_formatting]))
+
+  # Removes fractional part if fractional component is NA or 0
   fractional[nchar(fractional) == 1 | fractional == ".N"] <- ""
-  trimws(paste0(whole, fractional))
+  out[needs_formatting] <- trimws(paste0(whole, fractional))
+  out
 }
 
 #' @export
@@ -52,12 +65,17 @@ format_whole <- function(x, ...) {
 
 #' @export
 format_whole.integer <- function(x, bigmark = ",", ...) {
-  format(x, scientific = FALSE, big.mark = bigmark)
+  out <- sprintf("%i", x)
+  out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
+  if (bigmark != ",") out <- gsub(",", bigmark, out, fixed = TRUE)
+  out
 }
 
 #' @export
 format_whole.numeric <- function(x, bigmark = ",", ...) {
-  format(x, scientific = FALSE, big.mark = bigmark) # TODO: Maybe `sprintf()` instead, see what's best
+  # Using `format()` here since `sprintf("%i", ...)` can't handle numbers
+  # outside of the maximum integer
+  format(x, scientific = FALSE, big.mark = bigmark)
 }
 
 #' @export
