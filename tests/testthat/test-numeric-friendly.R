@@ -1,21 +1,7 @@
 # basics -----------------------------------------------------------------------
 
 test_that("`numeric_friendly()` works", {
-  expect_equal(
-    numeric_friendly(c(-Inf, Inf, 0, NA, NaN)),
-    c("negative infinity", "infinity", "zero", "missing", "not a number")
-  )
-  expect_equal(
-    numeric_friendly(
-      c(-Inf, Inf, 0, NA, NaN),
-      negative = "-",
-      inf = "Inf",
-      zero = "0",
-      na = "NA",
-      nan = "NaN"
-    ),
-    paste(c(-Inf, Inf, 0, NA, NaN))
-  )
+  # Basic usage
   expect_equal(
     numeric_friendly(c(1, 1.001, 0.001, 0.002, 10.002, 1001, 999999, 999.123)),
     c(
@@ -29,25 +15,61 @@ test_that("`numeric_friendly()` works", {
       "nine hundred ninety-nine and one hundred twenty-three thousandths"
     )
   )
-})
-
-test_that("`numeric_friendly()` returns `character(0)` on zero-length input", {
+  expect_equal(
+    numeric_friendly(-c(1, 1.001, 0.001, 0.002, 10.002, 1001, 999999, 999.123)),
+    c(
+      "negative one",
+      "negative one and one thousandth",
+      "negative one thousandth",
+      "negative two thousandths",
+      "negative ten and two thousandths",
+      "negative one thousand one",
+      "negative nine hundred ninety-nine thousand nine hundred ninety-nine",
+      "negative nine hundred ninety-nine and one hundred twenty-three thousandths"
+    )
+  )
+  # Special numbers
+  expect_equal(
+    numeric_friendly(c(-Inf, Inf, 0, NA, NaN)),
+    c("negative infinity", "infinity", "zero", "missing", "not a number")
+  )
+  # Special number arguments
+  expect_equal(
+    numeric_friendly(
+      c(-Inf, Inf, 0, NA, NaN),
+      negative = "-",
+      inf = "Inf",
+      zero = "0",
+      na = "NA",
+      nan = "NaN"
+    ),
+    paste(c(-Inf, Inf, 0, NA, NaN))
+  )
+  # Empty input
   expect_identical(numeric_friendly(numeric()), character())
 })
 
 # fractions --------------------------------------------------------------------
 
 test_that("Nice fractions (e.g. 'one half') work", {
+  # Default digits
   fractionals <- c(1/4, 3/4, 1/2, 1/3, 2/3)
   expect_equal(
     numeric_friendly(fractionals),
     c("one quarter", "three quarters", "one half", "one third", "two thirds")
   )
   expect_equal(
+    numeric_friendly(-fractionals),
+    c(
+      "negative one quarter", "negative three quarters", "negative one half",
+      "negative one third", "negative two thirds"
+    )
+  )
+  expect_equal(
     numeric_friendly(fractionals + 1),
     c("one and one quarter", "one and three quarters", "one and one half", "one and one third", "one and two thirds")
   )
-
+  # Non-default digits
   withr::local_options(list(friendlynumber.numeric.digits = 3))
   expect_equal(
     numeric_friendly(fractionals),
@@ -164,4 +186,50 @@ test_that("Regex metacharacters in `decimal` are handled correctly", {
   expect_equal(numeric_friendly(1.1, decimal = "\\1"), "one\\1one tenth")
   expect_equal(numeric_friendly(1, decimal = "\\1"), "one")
   expect_equal(numeric_friendly(1.1, decimal = "$"), "one$one tenth")
+})
+
+test_that("`numeric_friendly_safe()` enforces input types", {
+
+  expect_input_error <- function(object) {
+    expect_error(object, class = "friendlynumber_error_input_type")
+  }
+
+  int <- 1L
+  fraction <- 0.5
+  twochr <- c("a", "b")
+  string <- "A"
+  bool <- FALSE
+  chr <- c("333" = "one third")
+
+  expect_input_error(numeric_friendly_safe(bool))
+  expect_input_error(numeric_friendly_safe(fraction, zero = int))
+  expect_input_error(numeric_friendly_safe(fraction, zero = twochr))
+  expect_input_error(numeric_friendly_safe(fraction, na = int))
+  expect_input_error(numeric_friendly_safe(fraction, na = twochr))
+  expect_input_error(numeric_friendly_safe(fraction, nan = int))
+  expect_input_error(numeric_friendly_safe(fraction, nan = twochr))
+  expect_input_error(numeric_friendly_safe(fraction, inf = int))
+  expect_input_error(numeric_friendly_safe(fraction, inf = twochr))
+  expect_input_error(numeric_friendly_safe(fraction, negative = int))
+  expect_input_error(numeric_friendly_safe(fraction, negative = twochr))
+  expect_input_error(numeric_friendly_safe(fraction, and = int))
+  expect_input_error(numeric_friendly_safe(fraction, and = NA))
+  expect_input_error(numeric_friendly_safe(fraction, hyphenate = int))
+  expect_input_error(numeric_friendly_safe(fraction, hyphenate = NA))
+
+  expect_no_error(numeric_friendly_safe(fraction))
+  expect_no_error(
+    numeric_friendly_safe(
+      numbers = fraction,
+      zero = string,
+      na = string,
+      nan = string,
+      negative = string,
+      and = bool,
+      hyphenate = bool,
+      and_fractional = bool,
+      hyphenate_fractional = bool,
+      english_fractions = chr
+    )
+  )
 })
