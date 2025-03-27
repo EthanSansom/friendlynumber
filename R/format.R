@@ -18,25 +18,15 @@ format_number.bignum_biginteger <- function(x, bigmark = ",", ...) {
 
 #' @export
 format_number.numeric <- function(x, bigmark = ",", ...) {
-  out <- character(length(x))
   x_trunc <- trunc(x)
 
-  # Handle `NaN` and `Inf` specially since `format_whole()` expects an integerish
-  # value and `NaN/Inf` are numeric only.
-  # nan <- is.nan(x)
-  # inf <- is.infinite(x)
-  # out[nan] <- "NaN"
-  # out[inf] <- ifelse(x[inf] < 0, "-Inf", "Inf")
-
   # Format the whole part and the fractional part separately
-  needs_formatting <- TRUE # !(nan | inf)
-  whole <- format_whole(x_trunc[needs_formatting], bigmark = bigmark)
-  fractional <- paste0(".", format_fractional(x[needs_formatting] - x_trunc[needs_formatting]))
+  whole <- format_whole(x_trunc, bigmark = bigmark)
+  fractional <- paste0(".", format_fractional(x - x_trunc))
 
   # Removes fractional part if fractional component is NA or 0
   fractional[nchar(fractional) == 1 | fractional == ".N"] <- ""
-  out[needs_formatting] <- trimws(paste0(whole, fractional))
-  out
+  trimws(paste0(whole, fractional))
 }
 
 #' @export
