@@ -7,8 +7,8 @@
 # 1. Use `sprintf()`, `format()`, or other to convert to character: "1000000"
 # 2. Front pad with 0's so `nchar(x)` is a multiple of three: "001000000"
 # 3. Process the number using a revised `english_naturals()`
-# - `consume_hundreds()` becomes `substr(x, 3, nchar(x))` (still vectorized)
-# - `get_hundreds()` becomes `substr(x, 1, 3)` (still vectorized)
+# - `consume_hundreds()` uses `substr()` to remove the last 3 chars (still vectorized)
+# - `get_hundreds()` uses `substr()` to get the last 3 chars (still vectorized)
 # - `english$hundreds` is now a named dictionary "001" = "one", "101" = "one hundred and one"
 # - The number of suffixes (-illions) required is `nchar(x) %/% 3`
 #   - Conveniently, every suffix required can be made by `illions(seq(max(nchar(x) %/% 3)))`
@@ -497,7 +497,8 @@ english_naturals_recursive <- function(naturals, prefixes, iteration) {
 
 get_english_suffix <- function(iteration) {
   if (iteration > length(english$suffixes)) {
-    # When `iteration == 2L` is the thousands place (i.e. one thousand power ahead)
+    # When `iteration == 2L` we're at the thousands place, whereas `illions(2L)`
+    # is a "million".
     paste0(" ", nice_illions(iteration - 1L))
   } else {
     english$suffixes[iteration]
@@ -506,7 +507,7 @@ get_english_suffix <- function(iteration) {
 
 # This will raise warnings about precision issues for large numbers, which is
 # now what we want since we can steer users towards {bignum} if they need more
-# precision. Try `get_hundreds(100^100)`.
+# precision. E.g. try `get_hundreds(100^100)`.
 get_hundreds <- function(naturals) {
   naturals %% 1000L
 }
