@@ -1,7 +1,17 @@
 stop_unimplemented_method <- function(x, method) {
   friendlynumber_stop(
     message = paste0("No `", method, "` method implemented for class <", class(x)[1], ">."),
-    "friendlynumber_error_input_type"
+    class = "friendlynumber_error_input_type"
+  )
+}
+
+check_is_type <- function(x, is_type, must, null_ok = FALSE, x_name = arg_name(x)) {
+  if ((is.null(x) && null_ok) || is_type(x)) {
+    return(x)
+  }
+  friendlynumber_stop(
+    message = must_be_not(x, x_name, must = must),
+    class = "friendlynumber_error_input_type"
   )
 }
 
@@ -25,31 +35,33 @@ check_is_bool <- function(x, x_name = arg_name(x)) {
   )
 }
 
-check_is_numeric <- function(x, x_name = arg_name(x)) {
-  if (is.numeric(x)) {
-    return(x)
-  }
-  friendlynumber_stop(
-    message = must_be_not(x, x_name, must = "a numeric vector"),
-    class = "friendlynumber_error_input_type"
-  )
-}
-
-check_is_integer <- function(x, x_name = arg_name(x)) {
-  if (is.integer(x)) {
-    return(x)
-  }
-  friendlynumber_stop(
-    message = must_be_not(x, x_name, must = "an integer vector"),
-    class = "friendlynumber_error_input_type"
-  )
-}
+# TODO: Use `check_is_type()`
+#
+# check_is_numeric <- function(x, x_name = arg_name(x)) {
+#   if (is.numeric(x)) {
+#     return(x)
+#   }
+#   friendlynumber_stop(
+#     message = must_be_not(x, x_name, must = "a numeric vector"),
+#     class = "friendlynumber_error_input_type"
+#   )
+# }
+#
+# check_is_integer <- function(x, x_name = arg_name(x)) {
+#   if (is.integer(x)) {
+#     return(x)
+#   }
+#   friendlynumber_stop(
+#     message = must_be_not(x, x_name, must = "an integer vector"),
+#     class = "friendlynumber_error_input_type"
+#   )
+# }
 
 check_is_whole <- function(x, x_name = arg_name(x)) {
   if (is_whole(x)) {
     return(x)
   }
-  if (is_numericish(x)) {
+  if (is_doubleish(x)) {
     friendlynumber_stop(
       message = must_be(x_name, must = "coercible to an integer without loss of precision"),
       class = "friendlynumber_error_input_type"
@@ -74,19 +86,19 @@ is_string <- function(x) {
 # From `chk::chk_whole_numeric()`
 # https://github.com/poissonconsulting/chk/blob/a8fe0fa24a1fc68c30ef6d92c19af172fc1d5850/R/chk-whole-numeric.R#L26
 is_whole <- function(x) {
-  is.integer(x) || (is_numericish(x) && isTRUE(all.equal(x[!is.na(x)], trunc(x[!is.na(x)]))))
+  is.integer(x) || is_biginteger(x) || (is_doubleish(x) && isTRUE(all.equal(x[!is.na(x)], trunc(x[!is.na(x)]))))
 }
 
-is_numericish <- function(x) {
-  is.numeric(x) || is_bignumeric(x)
+is_doubleish <- function(x) {
+  is.double(x) || is_bigfloat(x)
 }
 
-is_bignumeric <- function(x) {
-  if (requireNamespace("bignum", quietly = TRUE)) {
-    bignum::is_biginteger(x) || bignum::is_bigfloat(x)
-  } else {
-    inherits(x, c("bignum_biginteger", "bignum_bigfloat"))
-  }
+is_bigfloat <- function(x) {
+  requireNamespace("bignum", quietly = TRUE) && bignum::is_bigfloat(x)
+}
+
+is_biginteger <- function(x) {
+  requireNamespace("bignum", quietly = TRUE) && bignum::is_biginteger(x)
 }
 
 # error helpers ----------------------------------------------------------------

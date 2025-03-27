@@ -46,3 +46,25 @@ integerish_friendly <- function(
   out[negatives] <- paste0(negative, out[negatives])
   out
 }
+
+integerish_friendly_safe <- function(
+    numbers,
+    zero = "zero",
+    na = "missing",
+    nan = "not a number",
+    inf = "infinity",
+    negative = "negative ",
+    and = FALSE,
+    hyphenate = TRUE
+  ) {
+  integerish_friendly(
+    check_is_whole(numbers),
+    zero = check_is_string(zero),
+    na = check_is_string(na),
+    nan = check_is_string(nan),
+    inf = check_is_string(inf),
+    negative = check_is_string(negative),
+    and = check_is_bool(and),
+    hyphenate = check_is_bool(hyphenate)
+  )
+}
