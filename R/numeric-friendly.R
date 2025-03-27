@@ -113,6 +113,7 @@ numeric_friendly <- function(
     fixed = TRUE
   )
 
+  out[negatives] <- paste0(negative, out[negatives])
   out
 }
 
@@ -130,18 +131,33 @@ numeric_friendly_safe <- function(
     hyphenate_fractional = hyphenate,
     english_fractions = NULL
 ) {
+  numbers <- check_is_type(numbers, is.numeric, "numeric")
+  zero <- check_is_string(zero)
+  na <- check_is_string(na)
+  nan <- check_is_string(nan)
+  inf <- check_is_string(inf)
+  negative <- check_is_string(negative)
+  decimal <- check_is_string(decimal)
+  and <- check_is_bool(and)
+  hyphenate <- check_is_bool(hyphenate)
+  and_fractional <- check_is_bool(and_fractional)
+  hyphenate_fractional <- check_is_bool(hyphenate_fractional)
+  english_fractions <- check_is_type(
+    english_fractions, is.character, "a character", null_ok = TRUE
+  )
+
   numeric_friendly(
-    check_is_type(numbers, is.numeric, "numeric"),
-    zero = check_is_string(zero),
-    na = check_is_string(na),
-    nan = check_is_string(nan),
-    inf = check_is_string(inf),
-    negative = check_is_string(negative),
-    decimal = check_is_string(decimal),
-    and = check_is_bool(and),
-    hyphenate = check_is_bool(hyphenate),
-    and_fractional = check_is_bool(and_fractional),
-    hyphenate_fractional = check_is_bool(hyphenate_fractional),
-    english_fractions = check_is_type(english_fractions, is.character, "a character", null_ok = TRUE)
+    numbers = numbers,
+    zero = zero,
+    na = na,
+    nan = nan,
+    inf = inf,
+    negative = negative,
+    decimal = decimal,
+    and = and,
+    hyphenate = hyphenate,
+    and_fractional = and_fractional,
+    hyphenate_fractional = hyphenate_fractional,
+    english_fractions = english_fractions
   )
 }
