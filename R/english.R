@@ -852,21 +852,11 @@ english_illions <- function(thousands_powers) {
   out <- character(length(thousands_powers))
 
   illions <- thousands_powers > 0
-  out[illions] <- english_illions_rec(thousands_powers[illions])
+  out[illions] <- english_illions_recursive(thousands_powers[illions])
   out
 }
 
-english_hundred_illions <- function(thousands_powers) {
-  english$illions[thousands_powers]
-}
-
-english_hundred_nillions <- function(thousands_powers) {
-  out <- english$illions[thousands_powers]
-  out[thousands_powers == 1] <- "nillion"
-  out
-}
-
-english_illions_rec <- function(thousands_powers) {
+english_illions_recursive <- function(thousands_powers) {
   out <- character(length(thousands_powers))
 
   zero_powers <- thousands_powers == 0
@@ -879,9 +869,19 @@ english_illions_rec <- function(thousands_powers) {
 
   out[small] <- english_hundred_illions(thousands_powers[small])
   out[large] <- paste0(
-    sub("on$", "", english_illions_rec(((thousands_powers[large] - 1) %/% 1000) + 1)),
+    sub("on$", "", english_illions_recursive(((thousands_powers[large] - 1) %/% 1000) + 1)),
     english_hundred_nillions(((thousands_powers[large] - 1) %% 1000) + 1)
   )
+  out
+}
+
+english_hundred_illions <- function(thousands_powers) {
+  english$illions[thousands_powers]
+}
+
+english_hundred_nillions <- function(thousands_powers) {
+  out <- english$illions[thousands_powers]
+  out[thousands_powers == 1] <- "nillion"
   out
 }
 
@@ -913,8 +913,6 @@ english_naturals <- function(naturals, and = FALSE, hyphenate = TRUE) {
   after_format(trimws(out), and = and, hyphenate = hyphenate)
 }
 
-# TODO: Try a `while` or `for` loop at some point instead of recursion, see if
-# faster for small and large naturals separately.
 english_naturals_recursive <- function(naturals, prefixes, iteration) {
 
   nonzero_naturals <- naturals != 0
