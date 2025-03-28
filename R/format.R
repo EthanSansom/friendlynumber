@@ -18,6 +18,8 @@ format_number.bignum_biginteger <- function(x, bigmark = ",", ...) {
 
 #' @export
 format_number.numeric <- function(x, bigmark = ",", ...) {
+  negative <- !is.na(x) & x < 0
+  x <- abs(x)
   x_trunc <- trunc(x)
 
   # Format the whole part and the fractional part separately
@@ -26,17 +28,27 @@ format_number.numeric <- function(x, bigmark = ",", ...) {
 
   # Removes fractional part if fractional component is NA or 0
   fractional[nchar(fractional) == 1 | fractional == ".N"] <- ""
-  trimws(paste0(whole, fractional))
+
+  out <- trimws(paste0(whole, fractional))
+  out[negative] <- paste0("-", out[negative])
+  out
 }
 
 #' @export
 format_number.bignum_bigfloat <- function(x, bigmark = ",", ...) {
+  negative <- !is.na(x) & x < 0
+  x <- abs(x)
   x_trunc <- trunc(x)
+
   whole <- format_whole(x_trunc, bigmark = bigmark)
   fractional <- paste0(".", format_fractional(x - x_trunc))
+
   # Removes fractional part if fractional component is NA, NaN, Inf, -Inf, or 0
   fractional[nchar(fractional) == 1 | fractional %in% c(".NA", ".N")] <- ""
-  paste0(whole, fractional)
+
+  out <- paste0(whole, fractional)
+  out[negative] <- paste0("-", out[negative])
+  out
 }
 
 #' @export
@@ -47,13 +59,13 @@ format_number.default <- function(x, ...) {
 # whole ------------------------------------------------------------------------
 # - `.numeric()` and `.bignum_bigfloat()` are only valid if `x` is integerish
 
+# TODO: Do I need to do anything special for an un-exported S3 method?
+
 # How to format a "whole" number (e.g. <integer>, <biginteger>, 1.0)
-#' @export
 format_whole <- function(x, ...) {
   UseMethod("format_whole")
 }
 
-#' @export
 format_whole.integer <- function(x, bigmark = ",", ...) {
   out <- sprintf("%i", x)
   out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
@@ -61,14 +73,12 @@ format_whole.integer <- function(x, bigmark = ",", ...) {
   out
 }
 
-#' @export
 format_whole.numeric <- function(x, bigmark = ",", ...) {
   # Using `format()` here since `sprintf("%i", ...)` can't handle numbers
   # outside of the maximum integer
   format(x, scientific = FALSE, big.mark = bigmark, trim = TRUE)
 }
 
-#' @export
 format_whole.bignum_bigfloat <- function(x, bigmark = ",", ...) {
   out <- format(x, notation = "dec")
   if (bigmark != "") {
@@ -79,17 +89,16 @@ format_whole.bignum_bigfloat <- function(x, bigmark = ",", ...) {
   out
 }
 
-#' @export
 format_whole.bignum_biginteger <- function(x, bigmark = ",", ...) {
   out <- format(x, notation = "dec")
   if (bigmark != "") {
     out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
     if (bigmark != ",") out <- gsub(",", bigmark, out, fixed = TRUE)
   }
+  out[is.na(out)] <- "NA" # `format.bignum_biginteger(NA)` is `NA`, not "NA"
   out
 }
 
-#' @export
 format_whole.default <- function(x, ...) {
   stop_unimplemented_method(x, "format_whole()")
 }
@@ -97,12 +106,10 @@ format_whole.default <- function(x, ...) {
 # fractional -------------------------------------------------------------------
 
 # How to format a fractional number between 0 and 1 (e.g. `0.34567`)
-#' @export
 format_fractional <- function(x, ...) {
   UseMethod("format_fractional")
 }
 
-#' @export
 format_fractional.numeric <- function(x, ...) {
   fmt <- paste0("%.", getOption("friendlynumber.numeric.digits", 7), "f")
   out <- sub("0+$", "", sprintf(fmt, x))
@@ -110,7 +117,6 @@ format_fractional.numeric <- function(x, ...) {
   substr(out, 3, nchar(out))
 }
 
-#' @export
 format_fractional.bignum_bigfloat <- function(x, ...) {
   out <- sub("0+$", "", format(
     x,
@@ -120,7 +126,6 @@ format_fractional.bignum_bigfloat <- function(x, ...) {
   substr(out, 3, nchar(out))
 }
 
-#' @export
 format_fractional.default <- function(x, ...) {
   stop_unimplemented_method(x, "format_fractional()")
 }
