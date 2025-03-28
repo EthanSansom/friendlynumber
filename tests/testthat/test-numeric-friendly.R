@@ -49,6 +49,19 @@ test_that("`numeric_friendly()` works", {
   expect_identical(numeric_friendly(numeric()), character())
 })
 
+test_that("`friendlynumber.numeric.digits` option works", {
+  number <- 0.123456789
+
+  withr::local_options(list(friendlynumber.numeric.digits = 9))
+  expect_equal(
+    numeric_friendly(number),
+    "one hundred twenty-three million four hundred fifty-six thousand seven hundred eighty-nine billionths"
+  )
+
+  withr::local_options(list(friendlynumber.numeric.digits = 3))
+  expect_equal(numeric_friendly(number), "one hundred twenty-three thousandths")
+})
+
 # fractions --------------------------------------------------------------------
 
 test_that("Nice fractions (e.g. 'one half') work", {
@@ -128,21 +141,21 @@ test_that("`hyphentate` and `hyphenate_fractional` arguments work", {
   )
   # `hyphenate_fractional`
   expect_equal(
-    numeric_friendly(c(0.1, 0.21, 0.123), hyphenate_fractional = TRUE),
-    c("one tenth", "twenty-one hundredths", "one hundred twenty-three thousandths")
+    numeric_friendly(c(0.1, 0.21, 0.0123), hyphenate_fractional = TRUE),
+    c("one tenth", "twenty-one hundredths", "one hundred twenty-three ten-thousandths")
   )
   expect_equal(
-    numeric_friendly(c(0.1, 0.21, 0.123), hyphenate_fractional = FALSE),
-    c("one tenth", "twenty one hundredths", "one hundred twenty three thousandths")
+    numeric_friendly(c(0.1, 0.21, 0.0123), hyphenate_fractional = FALSE),
+    c("one tenth", "twenty one hundredths", "one hundred twenty three ten thousandths")
   )
   # both
   expect_equal(
-    numeric_friendly(c(123.123), hyphenate = FALSE, hyphenate_fractional = TRUE),
-    "one hundred twenty three and one hundred twenty-three thousandths"
+    numeric_friendly(c(123.0123), hyphenate = FALSE, hyphenate_fractional = TRUE),
+    "one hundred twenty three and one hundred twenty-three ten-thousandths"
   )
   expect_equal(
-    numeric_friendly(c(123.123), hyphenate = TRUE, hyphenate_fractional = FALSE),
-    "one hundred twenty-three and one hundred twenty three thousandths"
+    numeric_friendly(c(123.0123), hyphenate = TRUE, hyphenate_fractional = FALSE),
+    "one hundred twenty-three and one hundred twenty three ten thousandths"
   )
 })
 
@@ -156,7 +169,7 @@ test_that("`and` and `and_fractional` arguments work", {
       "one thousand and twenty-one",
       "one point one tenth",
       "one thousand and twenty-one point one tenth",
-      "one thousand and twenty-one point one thousand and twenty-one ten thousandths"
+      "one thousand and twenty-one point one thousand and twenty-one ten-thousandths"
     )
   )
   expect_equal(
@@ -167,12 +180,12 @@ test_that("`and` and `and_fractional` arguments work", {
       "one thousand twenty-one",
       "one point one tenth",
       "one thousand twenty-one point one tenth",
-      "one thousand twenty-one point one thousand twenty-one ten thousandths"
+      "one thousand twenty-one point one thousand twenty-one ten-thousandths"
     )
   )
   expect_equal(
     numeric_friendly(1021.1021, and = TRUE, and_fractional = FALSE, decimal = " point "),
-    "one thousand and twenty-one point one thousand twenty-one ten thousandths"
+    "one thousand and twenty-one point one thousand twenty-one ten-thousandths"
   )
 })
 
@@ -187,6 +200,8 @@ test_that("Regex metacharacters in `decimal` are handled correctly", {
   expect_equal(numeric_friendly(1, decimal = "\\1"), "one")
   expect_equal(numeric_friendly(1.1, decimal = "$"), "one$one tenth")
 })
+
+# safe -------------------------------------------------------------------------
 
 test_that("`numeric_friendly_safe()` enforces input types", {
 

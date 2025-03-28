@@ -1,4 +1,66 @@
-# TODO: Add some regular tests for `bigfloat_friendly()`
+test_that("`bigfloat_friendly()` works", {
+  # Basic usage
+  bigfloat <- bignum::bigfloat(c(1, 1.001, 0.001, 0.002, 10.002, 1001, 999999, 999.123))
+  expect_equal(
+    bigfloat_friendly(bigfloat),
+    c(
+      "one",
+      "one and one thousandth",
+      "one thousandth",
+      "two thousandths",
+      "ten and two thousandths",
+      "one thousand one",
+      "nine hundred ninety-nine thousand nine hundred ninety-nine",
+      "nine hundred ninety-nine and one hundred twenty-three thousandths"
+    )
+  )
+  expect_equal(
+    bigfloat_friendly(-bigfloat),
+    c(
+      "negative one",
+      "negative one and one thousandth",
+      "negative one thousandth",
+      "negative two thousandths",
+      "negative ten and two thousandths",
+      "negative one thousand one",
+      "negative nine hundred ninety-nine thousand nine hundred ninety-nine",
+      "negative nine hundred ninety-nine and one hundred twenty-three thousandths"
+    )
+  )
+  # Special numbers
+  specialbigfloat <- bignum::bigfloat(c(-Inf, Inf, 0, NA, NaN))
+  expect_equal(
+    bigfloat_friendly(specialbigfloat),
+    c("negative infinity", "infinity", "zero", "missing", "not a number")
+  )
+  # Special number arguments
+  expect_equal(
+    bigfloat_friendly(
+      specialbigfloat,
+      negative = "-",
+      inf = "Inf",
+      zero = "0",
+      na = "NA",
+      nan = "NaN"
+    ),
+    paste(c(-Inf, Inf, 0, NA, NaN))
+  )
+  # Empty input
+  expect_identical(bigfloat_friendly(bignum::bigfloat()), character())
+})
+
+test_that("`friendlynumber.bigfloat.digits` option works", {
+  bigfloat <- bignum::bigfloat(0.123456789)
+
+  withr::local_options(list(friendlynumber.bigfloat.digits = 9))
+  expect_equal(
+    bigfloat_friendly(bigfloat),
+    "one hundred twenty-three million four hundred fifty-six thousand seven hundred eighty-nine billionths"
+  )
+
+  withr::local_options(list(friendlynumber.bigfloat.digits = 3))
+  expect_equal(bigfloat_friendly(bigfloat), "one hundred twenty-three thousandths")
+})
 
 test_that("`bigfloat_friendly_safe()` enforces input types", {
   skip_if_not_installed("bignum")
