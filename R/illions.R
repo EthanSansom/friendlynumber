@@ -1,3 +1,8 @@
+# comments ---------------------------------------------------------------------
+
+# These functions aren't exported or used, but I use them (`nice_illions()` in
+# particular) to generate the `english$illions` so I'm leaving them here for now.
+
 # illions ----------------------------------------------------------------------
 
 illions <- function(thousands_power) {

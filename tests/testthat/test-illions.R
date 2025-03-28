@@ -1,4 +1,4 @@
-test_that("`nice_illions()` works", {
+test_that("`english_illions()` works", {
   # Thank you to Steve Olsen: https://www.olsenhome.com/bignumbers/
   one_thousand_and_four_illions <- c(
     "thousand", "million", "billion", "trillion", "quadrillion",
@@ -399,60 +399,44 @@ test_that("`nice_illions()` works", {
   )
   expect_equal(
     one_thousand_and_four_illions,
-    nice_illions(1:1004)
+    english_illions(1:1004)
   )
 
   # Thanks @cookiefonste for these very large number names. Their site provides
   # these in powers of 10 (dividing by 3 for powers of 1000):
   # https://sites.google.com/site/pointlesslargenumberstuff/home/1/extendedillions1
-  expect_equal(nice_illions(3303 / 3), "millicentillion")
-  expect_equal(nice_illions(6003 / 3), "billinillion")
-  expect_equal(nice_illions(6006 / 3), "billimillion")
-  expect_equal(nice_illions(6009 / 3), "billibillion")
-  expect_equal(nice_illions(9003 / 3), "trillinillion")
-  expect_equal(nice_illions(12003 / 3), "quadrillinillion")
-  expect_equal(nice_illions(30003 / 3), "decillinillion")
-  expect_equal(nice_illions(300003 / 3), "centillinillion")
-  expect_equal(nice_illions(2999997 / 3), "novenonagintanongentillioctononagintanongentillion")
-  expect_equal(nice_illions(3000000 / 3), "novenonagintanongentillinovenonagintanongentillion")
-  expect_equal(nice_illions(3000003 / 3), "millinillinillion")
-  expect_equal(nice_illions(3000006 / 3), "millinillimillion")
-  expect_equal(nice_illions(3333333 / 3), "milliundecicentillidecicentillion")
-  expect_equal(nice_illions(6000003 / 3), "billinillinillion")
-  expect_equal(nice_illions(30000003 / 3), "decillinillinillion")
-  expect_equal(nice_illions(300000003 / 3), "centillinillinillion")
-  expect_equal(nice_illions(3000000003 / 3), "millinillinillinillion")
-  expect_equal(nice_illions(6000000003 / 3), "billinillinillinillion")
-  expect_equal(nice_illions(3000000000003 / 3), "millinillinillinillinillion")
-  expect_equal(nice_illions(3000000000000003 / 3), "millinillinillinillinillinillion")
+  expect_equal(english_illions(3303 / 3), "millicentillion")
+  expect_equal(english_illions(6003 / 3), "billinillion")
+  expect_equal(english_illions(6006 / 3), "billimillion")
+  expect_equal(english_illions(6009 / 3), "billibillion")
+  expect_equal(english_illions(9003 / 3), "trillinillion")
+  expect_equal(english_illions(12003 / 3), "quadrillinillion")
+  expect_equal(english_illions(30003 / 3), "decillinillion")
+  expect_equal(english_illions(300003 / 3), "centillinillion")
+  expect_equal(english_illions(2999997 / 3), "novenonagintanongentillioctononagintanongentillion")
+  expect_equal(english_illions(3000000 / 3), "novenonagintanongentillinovenonagintanongentillion")
+  expect_equal(english_illions(3000003 / 3), "millinillinillion")
+  expect_equal(english_illions(3000006 / 3), "millinillimillion")
+  expect_equal(english_illions(3333333 / 3), "milliundecicentillidecicentillion")
+  expect_equal(english_illions(6000003 / 3), "billinillinillion")
+  expect_equal(english_illions(30000003 / 3), "decillinillinillion")
+  expect_equal(english_illions(300000003 / 3), "centillinillinillion")
+  expect_equal(english_illions(3000000003 / 3), "millinillinillinillion")
+  expect_equal(english_illions(6000000003 / 3), "billinillinillinillion")
+  expect_equal(english_illions(3000000000003 / 3), "millinillinillinillinillion")
+  expect_equal(english_illions(3000000000000003 / 3), "millinillinillinillinillinillion")
 
   # Two failing cases, but I think these are typos on the website:
   # https://sites.google.com/site/pointlesslargenumberstuff/home/1/extendedillions1
-  # expect_equal(nice_illions(3003006  / 3), "millibillinillion")
-  # expect_equal(nice_illions(6030 / 3), "billidecillion")
+  # expect_equal(english_illions(3003006  / 3), "millibillinillion")
+  # expect_equal(english_illions(6030 / 3), "billidecillion")
 })
 
-test_that("`illions()` works", {
-  expect_snapshot(illions(1:1002))
-  expect_equal(illions(6000000003 / 3), "billinillinillinillion")
-  expect_equal(illions(3000000000003 / 3), "millinillinillinillinillion")
-  expect_equal(illions(3000000000000003 / 3), "millinillinillinillinillinillion")
-})
-
-test_that("`nice_tenillions()` works", {
-  expect_snapshot(nice_tenillions(1:100))
-  expect_equal(nice_tenillions(6000000003), "billinillinillinillion")
-  expect_equal(nice_tenillions(6000000003 + 1), "ten billinillinillinillion")
-  expect_equal(nice_tenillions(6000000003 + 2), "hundred billinillinillinillion")
-  expect_equal(nice_tenillions(3000000000003), "millinillinillinillinillion")
-  expect_equal(nice_tenillions(3000000000000003), "millinillinillinillinillinillion")
-})
-
-test_that("`tenillions()` works", {
-  expect_snapshot(tenillions(1:100))
-  expect_equal(tenillions(6000000003), "billinillinillinillion")
-  expect_equal(tenillions(6000000003 + 1), "ten billinillinillinillion")
-  expect_equal(tenillions(6000000003 + 2), "hundred billinillinillinillion")
-  expect_equal(tenillions(3000000000003), "millinillinillinillinillion")
-  expect_equal(tenillions(3000000000000003), "millinillinillinillinillinillion")
+test_that("`english_tenillions()` works", {
+  expect_snapshot(english_tenillions(1:100))
+  expect_equal(english_tenillions(6000000003), "billinillinillinillion")
+  expect_equal(english_tenillions(6000000003 + 1), "ten billinillinillinillion")
+  expect_equal(english_tenillions(6000000003 + 2), "hundred billinillinillinillion")
+  expect_equal(english_tenillions(3000000000003), "millinillinillinillinillion")
+  expect_equal(english_tenillions(3000000000000003), "millinillinillinillinillinillion")
 })
