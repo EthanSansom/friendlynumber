@@ -988,7 +988,7 @@ english_fractionals.numeric <- function(
   nices <- fractional_characters %in% names(english_fractions)
 
   out[zeros] <- zero
-  out[nices] <- english_fractions[fractional_characters]
+  out[nices] <- english_fractions[fractional_characters[nices]]
 
   if (all(zeros | nices)) {
     return(out)
@@ -1021,6 +1021,7 @@ english_fractionals.bignum_bigfloat <- function(
     hyphenate = TRUE,
     english_fractions = get_english_fractions(bignum::bigfloat("1"))
   ) {
+
   out <- character(length(fractionals))
 
   # The number of "english" decimal places is dependent on the number of decimals
@@ -1034,7 +1035,7 @@ english_fractionals.bignum_bigfloat <- function(
   nices <- fractional_characters %in% names(english_fractions)
 
   out[zeros] <- zero
-  out[nices] <- english_fractions[fractional_characters]
+  out[nices] <- english_fractions[fractional_characters[nices]]
 
   if (all(zeros | nices)) {
     return(out)
