@@ -1,3 +1,33 @@
+#' Translate integer-ish numbers to a character vector of nths (1st, 2nd, 3rd)
+#'
+#' @description
+#'
+#' Convert an integer vector, or numeric vector which is coercible to an integer
+#' without loss of precision, to an "nth" (e.g. 1st, 2nd, 3rd, 22nd, 1,000th).
+#'
+#' `nth_friendly_safe()` checks that all arguments are of the correct type
+#' and raises an informative error otherwise. `nth_friendly()` does not
+#' perform input validation to maximize its speed.
+#'
+#' @inheritParams params
+#'
+#' @returns
+#'
+#' A non-NA character vector of the same length as `numbers`.
+#'
+#' @examples
+#' nth_friendly(c(0, 1, 2, 3, 22, 1001, NA, NaN, Inf, -Inf))
+#'
+#' # Specify the translations of "special" numbers
+#' nth_friendly(c(1, 0, NA), zero = "noneth", na = "?")
+#'
+#' # Use `bigmark` to add or remove commas
+#' nth_friendly(1234, bigmark = TRUE)
+#' nth_friendly(1234, bigmark = FALSE)
+#'
+#' # Input validation
+#' try(nth_friendly_safe(1234, bigmark = ","))
+#' @export
 nth_friendly <- function(
     numbers,
     zero = "zeroth",
@@ -43,6 +73,8 @@ nth_friendly <- function(
   trimws(out)
 }
 
+#' @rdname nth_friendly
+#' @export
 nth_friendly_safe <- function(
     numbers,
     zero = "zeroth",

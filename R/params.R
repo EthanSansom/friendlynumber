@@ -5,9 +5,9 @@
 #' Default parameter descriptions which may be overridden in individual
 #' functions.
 #'
-#' @param numbers
+#' @param numbers `[integer / numeric]`
 #'
-#' A vector of numbers to translate.
+#' An integer or integer-ish numeric vector to translate.
 #'
 #' @param one `[character(1)]`
 #'
@@ -74,14 +74,20 @@
 #'
 #' `hyphenate_fractional` is equal to `hyphenate` by default.
 #'
+#' @param bigmark `[TRUE / FALSE]`
+#'
+#' Whether the thousands places of formatted numbers should be separated with
+#' a comma (e.g. `"10,000,000"` vs. `"10000000"`). `bigmark` is `TRUE` by
+#' default.
+#'
 #' @param english_fractions `[character]`
 #'
 #' A named character vector used as a dictionary for the translation of the
 #' fractional part of `numbers`. The names (i.e. keys) are the decimal digits
 #' of a fractional number and the values are the corresponding translations.
 #'
-#' For example `english_fractions = c("5" = "one half")` matches the number
-#' `0.5` (translated as `"one half"`) and `2.5` (translated as `"two and one half"`).
+#' For example `english_fractions = c("5" = "a half")` matches the number
+#' `0.5` (translated as `"a half"`) and `2.5` (translated as `"two and a half"`).
 #'
 #' By default `english_fractions` is a named character vector with translations
 #' for fractions `x / y` for `x = 1, 2, ..., 8` and `y = 1, 2, ..., 9`. For

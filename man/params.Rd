@@ -7,7 +7,9 @@
 \alias{args}
 \title{Parameter Descriptions for friendlynumber Package}
 \arguments{
-\item{numbers}{A vector of numbers to translate.}
+\item{numbers}{\verb{[integer / numeric]}
+
+An integer or integer-ish numeric vector to translate.}
 
 \item{one}{\verb{[character(1)]}
 
@@ -74,14 +76,20 @@ vs. \code{"one ten millionth"}).
 
 \code{hyphenate_fractional} is equal to \code{hyphenate} by default.}
 
+\item{bigmark}{\verb{[TRUE / FALSE]}
+
+Whether the thousands places of formatted numbers should be separated with
+a comma (e.g. \code{"10,000,000"} vs. \code{"10000000"}). \code{bigmark} is \code{TRUE} by
+default.}
+
 \item{english_fractions}{\verb{[character]}
 
 A named character vector used as a dictionary for the translation of the
 fractional part of \code{numbers}. The names (i.e. keys) are the decimal digits
 of a fractional number and the values are the corresponding translations.
 
-For example \code{english_fractions = c("5" = "one half")} matches the number
-\code{0.5} (translated as \code{"one half"}) and \code{2.5} (translated as \code{"two and one half"}).
+For example \code{english_fractions = c("5" = "a half")} matches the number
+\code{0.5} (translated as \code{"a half"}) and \code{2.5} (translated as \code{"two and a half"}).
 
 By default \code{english_fractions} is a named character vector with translations
 for fractions \code{x / y} for \verb{x = 1, 2, ..., 8} and \verb{y = 1, 2, ..., 9}. For

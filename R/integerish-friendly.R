@@ -11,10 +11,6 @@
 #'
 #' @inheritParams params
 #'
-#' @param numbers `[integer / numeric]`
-#'
-#' An integer or integer-ish numeric vector to translate.
-#'
 #' @returns
 #'
 #' A non-NA character vector of the same length as `numbers`.
@@ -33,8 +29,8 @@
 #' integerish_friendly(1234, hyphenate = FALSE)
 #'
 #' # Input validation
-#' try(integerish_friendly(0.5))
-#' try(integerish_friendly(1L, na = TRUE))
+#' try(integerish_friendly_safe(0.5))
+#' try(integerish_friendly_safe(1L, na = TRUE))
 #' @export
 integerish_friendly <- function(
     numbers,

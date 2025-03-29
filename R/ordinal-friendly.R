@@ -11,10 +11,6 @@
 #'
 #' @inheritParams params
 #'
-#' @param numbers `[integer / numeric]`
-#'
-#' An integer or integer-ish numeric vector to translate.
-#'
 #' @returns
 #'
 #' A non-NA character vector of the same length as `numbers`.

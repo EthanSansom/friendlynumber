@@ -1,3 +1,59 @@
+#' Translate integer-ish numbers to a character vector of quantifiers (the, both, all three)
+#'
+#' @description
+#'
+#' Convert an integer vector, or numeric vector which is coercible to an integer
+#' without loss of precision, to a quantifier (e.g. no, the, every, all five).
+#'
+#' `quantifier_friendly_safe()` checks that all arguments are of the correct type
+#' and raises an informative error otherwise. `quantifier_friendly()` does not
+#' perform input validation to maximize its speed.
+#'
+#' @inheritParams params
+#'
+#' @param max_friendly `[numeric]`
+#'
+#' The maximum number to convert to a numeral. Elements of `numbers` above
+#' `max_friendly` are converted to formatted numbers (e.g. `"all 1,000"`
+#' instead of `"all one thousand"`). `max_friendly` is `100` by default.
+#'
+#' Use the `bigmark` argument to determine whether these formatted numbers
+#' are comma separated (e.g. `"all 1,000"` vs. `"all 1000"`).
+#'
+#' @returns
+#'
+#' A non-NA character vector of the same length as `numbers`.
+#'
+#' @examples
+#' quantifier_friendly(c(0, 1, 2, 3, NA, NaN, Inf))
+#'
+#' # The `negative` prefix appears after the `"all"` prefix
+#' quantifier_friendly(-4)
+#'
+#' # `-1` and `-2` are not translated using `one` and `two`
+#' quantifier_friendly(c(1, 2, -1, -2), one = "the", two = "both")
+#'
+#' # Suppress the translation of large numbers
+#' quantifier_friendly(c(99, 1234), max_friendly = -Inf)
+#' quantifier_friendly(c(99, 1234), max_friendly = 100)
+#' quantifier_friendly(c(99, 1234), max_friendly = 1500)
+#'
+#' # Specify the translations of "special" numbers
+#' quantifier_friendly(c(1, Inf), one = "a", inf = "all")
+#'
+#' # Arguments `one`, `two`, `inf`, etc. take precedence over `max_friendly`
+#' quantifier_friendly(1:3, one = "one", two = "two", max_friendly = -1)
+#'
+#' # Modify the output formatting
+#' quantifier_friendly(1021, max_friendly = Inf)
+#' quantifier_friendly(1021, and = TRUE, max_friendly = Inf)
+#' quantifier_friendly(1021, hyphenate = FALSE, max_friendly = Inf)
+#' quantifier_friendly(1021, bigmark = FALSE, max_friendly = 10)
+#' quantifier_friendly(1021, bigmark = TRUE, max_friendly = 10)
+#'
+#' # Input validation
+#' try(quantifier_friendly_safe(1234, max_friendly = NA))
+#' @export
 quantifier_friendly <- function(
     numbers,
     one = "the",
@@ -35,7 +91,7 @@ quantifier_friendly <- function(
 
   # Numbers above `max_friendly` get non-english names, e.g. `1000` -> "all 1,000"
   numbers <- abs(numbers)
-  bigs <- !(missings | infinites) & numbers > max_friendly
+  bigs <- !(missings | infinites | ones | twos) & numbers > max_friendly
   out[bigs] <- format_whole(numbers[bigs], bigmark = if (bigmark) "," else "")
 
   needs_englishifying <- !(infinites | missings | zeros | ones | twos | bigs)
@@ -70,6 +126,8 @@ quantifier_friendly <- function(
   out
 }
 
+#' @rdname quantifier_friendly
+#' @export
 quantifier_friendly_safe <- function(
     numbers,
     one = "the",

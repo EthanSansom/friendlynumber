@@ -1,3 +1,34 @@
+#' Translate integer-ish numbers to a character vector of counts (once, twice, three times)
+#'
+#' @description
+#'
+#' Convert an integer vector, or numeric vector which is coercible to an integer
+#' without loss of precision, to a count (e.g. no times, once, twice, four times).
+#'
+#' `ntimes_friendly_safe()` checks that all arguments are of the correct type
+#' and raises an informative error otherwise. `ntimes_friendly()` does not
+#' perform input validation to maximize its speed.
+#'
+#' @inheritParams params
+#'
+#' @returns
+#'
+#' A non-NA character vector of the same length as `numbers`.
+#'
+#' @examples
+#' ntimes_friendly(c(0, 1, 2, 3, 22, 1001, NA, NaN, Inf, -Inf))
+#'
+#' # Specify the translations of "special" numbers
+#' ntimes_friendly(c(3, NA), three = "thrice", na = "some times")
+#'
+#' # Modify the output formatting
+#' ntimes_friendly(5678)
+#' ntimes_friendly(5678, and = TRUE)
+#' ntimes_friendly(5678, hyphenate = FALSE)
+#'
+#' # Input validation
+#' try(ntimes_friendly_safe(1234, and = " - "))
+#' @export
 ntimes_friendly <- function(
     numbers,
     one = "once",
