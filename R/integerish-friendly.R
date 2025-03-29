@@ -1,3 +1,41 @@
+#' Translate integer-ish numbers to a cardinal character vector
+#'
+#' @description
+#'
+#' Convert an integer vector, or numeric vector which is coercible to an integer
+#' without loss of precision, to a cardinal numeral (e.g. one, two, three).
+#'
+#' `integerish_friendly_safe()` checks that all arguments are of the correct type
+#' and raises an informative error otherwise. `integerish_friendly()` does not
+#' perform input validation to maximize its speed.
+#'
+#' @inheritParams params
+#'
+#' @param numbers `[integer / numeric]`
+#'
+#' An integer or integer-ish numeric vector to translate.
+#'
+#' @returns
+#'
+#' A non-NA character vector of the same length as `numbers`.
+#'
+#' @examples
+#' integerish_friendly(c(0, 1, 2, NA, NaN, Inf, -Inf))
+#' integerish_friendly(10^10)
+#'
+#' # Specify the translations of "special" numbers
+#' integerish_friendly(-10, negative = "minus ")
+#' integerish_friendly(NaN, nan = "undefined")
+#'
+#' # Modify the output formatting
+#' integerish_friendly(1234)
+#' integerish_friendly(1234, and = TRUE)
+#' integerish_friendly(1234, hyphenate = FALSE)
+#'
+#' # Input validation
+#' try(integerish_friendly(0.5))
+#' try(integerish_friendly(1L, na = TRUE))
+#' @export
 integerish_friendly <- function(
     numbers,
     zero = "zero",
@@ -47,6 +85,8 @@ integerish_friendly <- function(
   out
 }
 
+#' @rdname integerish_friendly
+#' @export
 integerish_friendly_safe <- function(
     numbers,
     zero = "zero",

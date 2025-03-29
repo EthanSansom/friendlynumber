@@ -1,3 +1,57 @@
+#' Translate a numeric vector to a cardinal character vector
+#'
+#' @description
+#'
+#' Convert a numeric vector to a cardinal numeral (e.g. one tenth, one, two).
+#'
+#' `numeric_friendly_safe()` checks that all arguments are of the correct type
+#' and raises an informative error otherwise. `numeric_friendly()` does not
+#' perform input validation to maximize its speed.
+#'
+#' @inheritParams params
+#'
+#' @param numbers `[numeric]`
+#'
+#' A numeric vector to translate.
+#'
+#' @returns
+#'
+#' A non-NA character vector of the same length as `numbers`.
+#'
+#' @examples
+#' numeric_friendly(c(1/3, 0, 0.999, NA, NaN, Inf, -Inf))
+#'
+#' # Specify the translations of "special" numbers
+#' numeric_friendly(c(1, 0, Inf), zero = "none", inf = "all")
+#'
+#' # Modify the output formatting
+#' frac <- 8765.4321
+#' numeric_friendly(frac)
+#' numeric_friendly(frac, decimal = " dot ")
+#' numeric_friendly(frac, hyphenate = TRUE, hyphenate_fractional = FALSE)
+#' numeric_friendly(frac, and = TRUE, and_fractional = TRUE, decimal = " . ")
+#'
+#' # The `friendlynumber.numeric.digits` option specifies the number of
+#' # numeric digits mentioned by `numeric_friendly()`
+#' opts <- options()
+#' options(friendlynumber.numeric.digits = 5)
+#' numeric_friendly(0.0987654321)
+#'
+#' options(friendlynumber.numeric.digits = 10)
+#' numeric_friendly(0.0987654321)
+#' options(opts)
+#'
+#' # Set `english_fractions` to specify the translation of certain
+#' # fractions. The names (keys) of `english_fractions` should match
+#' # the decimal part of a fraction (e.g. `"5"` matches `0.5`).
+#' numeric_friendly(
+#'   c(1/2, 6/5, 12),
+#'   english_fractions = c(`5` = "1/2", `2` = "1/5")
+#' )
+#'
+#' # Input validation
+#' try(numeric_friendly_safe("A"))
+#' @export
 numeric_friendly <- function(
     numbers,
     zero = "zero",
@@ -117,6 +171,8 @@ numeric_friendly <- function(
   out
 }
 
+#' @rdname numeric_friendly
+#' @export
 numeric_friendly_safe <- function(
     numbers,
     zero = "zero",

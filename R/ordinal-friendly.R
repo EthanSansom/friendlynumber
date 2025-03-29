@@ -1,3 +1,39 @@
+#' Translate integer-ish numbers to an ordinal character vector
+#'
+#' @description
+#'
+#' Convert an integer vector, or numeric vector which is coercible to an integer
+#' without loss of precision, to an ordinal numeral (e.g. first, second, third).
+#'
+#' `ordinal_friendly_safe()` checks that all arguments are of the correct type
+#' and raises an informative error otherwise. `ordinal_friendly()` does not
+#' perform input validation to maximize its speed.
+#'
+#' @inheritParams params
+#'
+#' @param numbers `[integer / numeric]`
+#'
+#' An integer or integer-ish numeric vector to translate.
+#'
+#' @returns
+#'
+#' A non-NA character vector of the same length as `numbers`.
+#'
+#' @examples
+#' ordinal_friendly(c(0, 1, 2, 3, NA, NaN, Inf, -Inf))
+#' ordinal_friendly(10^10)
+#'
+#' # Specify the translations of "special" numbers
+#' ordinal_friendly(0, zero = "noneth")
+#'
+#' # Modify the output formatting
+#' ordinal_friendly(1234)
+#' ordinal_friendly(1234, and = TRUE)
+#' ordinal_friendly(1234, hyphenate = FALSE)
+#'
+#' # Input validation
+#' try(ordinal_friendly_safe(0.5))
+#' @export
 ordinal_friendly <- function(
     numbers,
     zero = "zeroth",

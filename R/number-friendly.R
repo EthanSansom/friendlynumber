@@ -1,8 +1,53 @@
+#' Translate a vector of numbers to a cardinal character vector
+#'
+#' @description
+#'
+#' Convert a vector of numbers to a cardinal numeral (e.g. one tenth, one, two).
+#'
+#' `number_friendly_safe()` checks that all arguments are of the correct type
+#' and raises an informative error otherwise. `number_friendly()` does not
+#' perform input validation to maximize its speed.
+#'
+#' @param numbers
+#'
+#' A vector of numbers to translate. The {friendlynumber} package defines
+#' methods for integer, numeric, [bignum::biginteger()], and
+#' [bignum::bigfloat()] numbers.
+#'
+#' * Integers are passed to [integerish_friendly()]
+#' * Numeric vectors are passed to [numeric_friendly()]
+#' * [bignum::biginteger()] vectors are passed to [biginteger_friendly()]
+#' * [bignum::bigfloat()] vectors are passed to [bigfloat_friendly()]
+#'
+#' @param ...
+#'
+#' Additional arguments passed to or from other methods.
+#'
+#' @returns
+#'
+#' A non-NA character vector of the same length as `numbers`.
+#'
+#' @seealso [integerish_friendly()], [numeric_friendly()],
+#' [biginteger_friendly()], [bigfloat_friendly()]
+#'
+#' @examples
+#' number_friendly(c(1/3, 0, 0.999, NA, NaN, Inf, -Inf))
+#' number_friendly(c(1L, 2L, 1001L))
+#'
+#' if (requireNamespace("bignum", quietly = TRUE)) {
+#'   number_friendly(bignum::bigfloat(0.1234))
+#'   number_friendly(bignum::biginteger(10L)^50L)
+#' }
+#'
+#' # Input validation
+#' try(number_friendly_safe(1L, zero = c("a", "zero")))
 #' @export
 number_friendly <- function(numbers, ...) {
   UseMethod("number_friendly")
 }
 
+#' @rdname number_friendly
+#' @inheritParams params
 #' @export
 number_friendly.numeric <- function(
     numbers,
@@ -35,6 +80,8 @@ number_friendly.numeric <- function(
   )
 }
 
+#' @rdname number_friendly
+#' @inheritParams params
 #' @export
 number_friendly.integer <- function(
     numbers,
@@ -59,6 +106,8 @@ number_friendly.integer <- function(
   )
 }
 
+#' @rdname number_friendly
+#' @inheritParams params
 #' @export
 number_friendly.bignum_biginteger <- function(
     numbers,
@@ -83,6 +132,8 @@ number_friendly.bignum_biginteger <- function(
   )
 }
 
+#' @rdname number_friendly
+#' @inheritParams params
 #' @export
 number_friendly.bignum_bigfloat <- function(
     numbers,
@@ -115,6 +166,7 @@ number_friendly.bignum_bigfloat <- function(
   )
 }
 
+#' @rdname number_friendly
 #' @export
 number_friendly.default <- function(numbers, ...) {
   stop_unimplemented_method(numbers, "number_friendly()")
@@ -122,11 +174,13 @@ number_friendly.default <- function(numbers, ...) {
 
 # safe -------------------------------------------------------------------------
 
+#' @rdname number_friendly
 #' @export
 number_friendly_safe <- function(numbers, ...) {
   UseMethod("number_friendly_safe")
 }
 
+#' @rdname number_friendly
 #' @export
 number_friendly_safe.numeric <- function(
     numbers,
@@ -159,6 +213,7 @@ number_friendly_safe.numeric <- function(
   )
 }
 
+#' @rdname number_friendly
 #' @export
 number_friendly_safe.integer <- function(
     numbers,
@@ -183,6 +238,7 @@ number_friendly_safe.integer <- function(
   )
 }
 
+#' @rdname number_friendly
 #' @export
 number_friendly_safe.bignum_biginteger <- function(
     numbers,
@@ -207,6 +263,7 @@ number_friendly_safe.bignum_biginteger <- function(
   )
 }
 
+#' @rdname number_friendly
 #' @export
 number_friendly_safe.bignum_bigfloat <- function(
     numbers,
@@ -239,6 +296,7 @@ number_friendly_safe.bignum_bigfloat <- function(
   )
 }
 
+#' @rdname number_friendly
 #' @export
 number_friendly_safe.default <- function(numbers, ...) {
   stop_unimplemented_method(numbers, "number_friendly_safe()")
