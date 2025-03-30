@@ -25,7 +25,7 @@ test_that("`nth_friendly()` works", {
   # Special numbers
   expect_equal(
     nth_friendly(c(0, NaN, NA, -Inf, Inf)),
-    c("zeroth", "not a numberth", "missingth", "negative infinitieth", "infinitieth")
+    c("0th", "not a numberth", "missingth", "negative infinitieth", "infinitieth")
   )
   # Special number arguments
   expect_equal(
@@ -34,10 +34,10 @@ test_that("`nth_friendly()` works", {
       na = "NAth",
       nan = "NaNth",
       inf = "Infth",
-      zero = "0th",
+      zero = "zeroth",
       negative = "-"
     ),
-    c("0th", "NaNth", "NAth", "-Infth", "Infth")
+    c("zeroth", "NaNth", "NAth", "-Infth", "Infth")
   )
   # Empty input
   expect_identical(nth_friendly(integer()), character())

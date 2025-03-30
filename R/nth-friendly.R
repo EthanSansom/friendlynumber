@@ -30,7 +30,7 @@
 #' @export
 nth_friendly <- function(
     numbers,
-    zero = "zeroth",
+    zero = "0th",
     na = "missingth",
     nan = "not a numberth",
     inf = "infinitieth",
