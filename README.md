@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# friendlynumber
+# friendlynumber <img src="man/figures/logo.svg" align="right" height="139" alt="" />
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -177,9 +177,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english         88.64µs  93.52µs    10406.     140KB     33.9
-#> 2 nombre         120.46µs 124.72µs     7877.     685KB     29.3
-#> 3 friendlynumber   6.64µs   7.22µs   134921.        0B     40.5
+#> 1 english          89.8µs  92.91µs    10634.     140KB     33.8
+#> 2 nombre          120.6µs 125.42µs     7731.     685KB     29.4
+#> 3 friendlynumber    6.6µs   7.22µs   135389.        0B     40.6
 ```
 
 ``` r
@@ -192,9 +192,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english           175µs  179.2µs     5527.    8.26KB     25.0
-#> 2 nombre          125.9µs    130µs     7548.        0B     31.6
-#> 3 friendlynumber   34.6µs   36.1µs    27232.        0B     30.0
+#> 1 english           174µs  179.7µs     5424.    8.26KB     25.1
+#> 2 nombre          125.6µs  130.5µs     7327.        0B     31.7
+#> 3 friendlynumber   34.7µs   36.1µs    27156.        0B     29.9
 ```
 
 ``` r
@@ -208,9 +208,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english           1.25s    1.25s     0.800    2.34MB    12.8 
-#> 2 nombre          44.94ms  47.34ms    21.3     11.43MB    11.6 
-#> 3 friendlynumber   8.89ms   9.12ms   104.       3.87MB     7.88
+#> 1 english           1.25s    1.25s     0.801    2.34MB    12.0 
+#> 2 nombre          45.59ms  48.15ms    20.7     11.43MB    13.2 
+#> 3 friendlynumber   8.97ms   9.27ms   102.       3.87MB     7.85
 ```
 
 To increase the speed of processing scalar inputs, the set of
