@@ -63,7 +63,7 @@ number_friendly(c(0:3, 2/3, 1/100, NA, NaN, Inf))
 Each method has a corresponding standalone `*_friendly()` function which expects 
 a number of a specific class.
 
-```{r number-friendly-methods}
+```{r}
 number_friendly(1L)                     # integerish_friendly()
 number_friendly(1.0)                    # numeric_friendly()
 number_friendly(bignum::biginteger(1L)) # biginteger_friendly()
@@ -111,7 +111,7 @@ bigfloat_friendly(bignum::bigfloat(0.12345))
 `format_number()` is a utility function which formats numbers via `format()` and
 abides by these options.
 
-```{r format-number}
+```{r}
 format_number(0.12345)
 format_number(bignum::bigfloat(0.12345))
 ```
@@ -159,14 +159,12 @@ bench::mark(
   nombre = as.character(nombre::nom_card(1L)),
   friendlynumber = as.character(number_friendly(1L))
 )[1:6]
-
 # Scalar (large)
 bench::mark(
   english = as.character(english::english(100000)),
   nombre = as.character(nombre::nom_card(100000)),
   friendlynumber = as.character(number_friendly(100000))
 )[1:6]
-
 # Vector
 bench::mark(
   english = as.character(english::english(1:10000)),

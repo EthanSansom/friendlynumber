@@ -207,13 +207,12 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english          89.2µs  92.72µs    10638.     140KB     33.8
-#> 2 nombre          121.5µs 125.38µs     7837.     685KB     29.3
-#> 3 friendlynumber    6.6µs   7.26µs   134007.        0B     53.6
+#> 1 english         89.17µs   93.8µs    10356.     140KB     33.9
+#> 2 nombre         119.72µs  124.9µs     7832.     685KB     31.5
+#> 3 friendlynumber   6.64µs    7.3µs   133272.        0B     40.0
 ```
 
 ``` r
-
 # Scalar (large)
 bench::mark(
   english = as.character(english::english(100000)),
@@ -223,13 +222,12 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english         173.6µs    179µs     5492.    8.26KB     25.1
-#> 2 nombre          126.4µs    130µs     7557.        0B     31.7
-#> 3 friendlynumber   34.6µs     36µs    27316.        0B     30.1
+#> 1 english         174.3µs    180µs     5484.    8.26KB     27.2
+#> 2 nombre            126µs    130µs     7473.        0B     31.7
+#> 3 friendlynumber   34.5µs     36µs    27372.        0B     30.1
 ```
 
 ``` r
-
 # Vector
 bench::mark(
   english = as.character(english::english(1:10000)),
@@ -240,9 +238,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english           1.24s    1.24s     0.805    2.34MB    12.9 
-#> 2 nombre          44.91ms  47.72ms    21.4     11.43MB    11.7 
-#> 3 friendlynumber   8.93ms   9.16ms   104.       3.87MB     7.87
+#> 1 english           1.25s    1.25s     0.803    2.34MB    12.0 
+#> 2 nombre          44.99ms  48.34ms    21.0     11.43MB    13.4 
+#> 3 friendlynumber   8.97ms   9.16ms   103.       3.87MB     7.93
 ```
 
 To increase the speed of processing scalar inputs, the set of
