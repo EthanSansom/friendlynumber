@@ -40,8 +40,8 @@ test_that("`ordinal_friendly()` works", {
   )
   # Special numbers
   expect_equal(
-    ordinal_friendly(c(0, NaN, NA, -Inf, Inf)),
-    c("zeroth", "not a numberth", "missingth", "negative infinitieth", "infinitieth")
+    ordinal_friendly(c(0, NaN, NA, -Inf, Inf, 10)),
+    c("zeroth", "not a numberth", "missingth", "negative infinitieth", "infinitieth", "tenth")
   )
   # Special number arguments
   expect_equal(

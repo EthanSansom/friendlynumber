@@ -63,13 +63,13 @@ ordinal_friendly <- function(
 
   remaining_numbers <- abs(numbers[needs_englishifying])
   if (all(remaining_numbers < 1000)) {
-    out[needs_englishifying] <- after_format(
+    out[needs_englishifying] <- ordinalify(after_format(
       english_hundreds(remaining_numbers),
       and = and,
       hyphenate = hyphenate
-    )
+    ))
     out[negatives] <- paste0(negative, out[negatives])
-    return(ordinalify(out))
+    return(out)
   }
 
   out[needs_englishifying] <- ordinalify(english_naturals(
