@@ -1,8 +1,11 @@
 Package: friendlynumber
 Title: Translate numbers into English numerals
 Version: 0.0.0.9000
-Authors@R: 
-    person("Ethan", "Sansom", , role = c("aut", "cre"))
+Authors@R: person(
+  "Ethan", "Sansom", 
+  email = "ethan.sansom29@gmail.com",
+  role = c("aut", "cre")
+  )
 Description: Converts number vectors to character vectors of numerals, including cardinals (one, two, three) and ordinals (first, second, third). Supports negative numbers, fractions, and arbitrary-precision integer and high-precision floating-point vectors provided by the {bignum} package.
 License: MIT + file LICENSE
 Encoding: UTF-8
