@@ -26,9 +26,9 @@ English numerals (AKA number words). Supported numerals include:
 * Counts: no times, once, twice, three times
 * Quantifiers: no, the, both, all three, all 999, every
 
-{friendlynumber} functions are intended to be used internally by other functions
+{friendlynumber} functions are intended to be used internally by other packages
 (e.g. for generating friendly error messages). To this end, {friendlynumber} is
-writing in base R and has no Imports.
+written in base R and has no Imports.
 
 ## Installation
 
@@ -53,17 +53,17 @@ library(friendlynumber)
 number_friendly(c(0:3, 2/3, 1/100, NA, NaN, Inf))
 ```
 
-`number_friendly()` currently defines methods for four types of numbers:
+`number_friendly()` defines methods for four number classes included in base `R` 
+and the [{bignum}](https://davidchall.github.io/bignum/) package:
 
-* Base `<integer>` vectors
-* Base `<numeric>` vectors
-* [{bignum}](https://davidchall.github.io/bignum/) `<bignum_biginteger>` vectors, which can store arbitrarily large integers
+* Base `<integer>` and `<numeric>` vectors
+* {bignum} `<bignum_biginteger>` vectors, which can store arbitrarily large integers
 * {bignum} `<bignum_bigfloat>` vectors, which store numbers with 50 decimal digits of precision
 
 Each method has a corresponding standalone `*_friendly()` function which expects 
 a number of a specific class.
 
-```{r}
+```{r number-friendly-methods}
 number_friendly(1L)                     # integerish_friendly()
 number_friendly(1.0)                    # numeric_friendly()
 number_friendly(bignum::biginteger(1L)) # biginteger_friendly()
@@ -77,22 +77,22 @@ numbers (e.g. `1L` or `1.00`) into common numeral types.
 
 ```{r whole-friendly}
 # Ordinals
-ordinal_friendly(0:5)
+ordinal_friendly(0:4)
 
 # Numeric Ordinals
-nth_friendly(0:5)
+nth_friendly(0:4)
 
 # Counts
-ntimes_friendly(0:5)
+ntimes_friendly(0:4)
 
 # Quantifiers
-quantifier_friendly(0:5)
+quantifier_friendly(0:4)
 ```
 
 ### Precision
 
 {friendlynumber} provides two `options()` for setting the number of decimals
-that {friendlynumber} function report.
+that {friendlynumber} functions report.
 
 ```{r preserve-opts, include = FALSE}
 opts <- options()
@@ -111,7 +111,7 @@ bigfloat_friendly(bignum::bigfloat(0.12345))
 `format_number()` is a utility function which formats numbers via `format()` and
 abides by these options.
 
-```{r}
+```{r format-number}
 format_number(0.12345)
 format_number(bignum::bigfloat(0.12345))
 ```
@@ -130,6 +130,10 @@ numeric_friendly(10000000000.00001)
 bigfloat_friendly(bignum::bigfloat("10000000000.00001"))
 ```
 
+```{r reset-opts, include = FALSE}
+options(opts)
+```
+
 We can use `format_number()` to confirm that, on my machine, a `<numeric>` 
 vector lacks the precision to store this number accurately.
 
@@ -141,8 +145,11 @@ format_number(bignum::bigfloat("10000000000.00001"))
 Similar problems can arise when working with whole numbers. Consider the number
 "ten quadrillion" minus one.
 
-```{r whole-precision}
+```{r whole-precision-numeric}
 numeric_friendly(10000000000000000 - 1)
+```
+
+```{r whole-precision-bigfloat}
 biginteger_friendly(bignum::biginteger("10000000000000000") - 1L)
 ```
 
@@ -176,7 +183,7 @@ bench::mark(
 
 To increase the speed of processing scalar inputs, the set of `*_friendly()` 
 functions do not check that their arguments are of valid types. All
-`*_friendly()` functions have a (very-slightly) slower `*_friendly_safe()` 
+`*_friendly()` functions have a slightly slower `*_friendly_safe()` 
 alternative which confirms that it's arguments are of the correct type and 
 emits an informative error otherwise.
 
@@ -196,7 +203,7 @@ number_friendly(bignum::biginteger(10L)^3003L)
 
 This package was originally inspired by the [{english}](https://cran.r-project.org/web/packages/english/index.html)
 package by John Fox, Bill Venables, Anthony Damico and Anne Pier Salverda, which 
-spurred my brief fixation with the programming puzzle of converting numbers to 
+spurred my fixation with the programming puzzle of converting numbers to 
 numerals.
 
 Several functions in {friendlynumber} were inspired by Alexander Rossell Hayes'
@@ -207,7 +214,7 @@ Several functions in {friendlynumber} were inspired by Alexander Rossell Hayes'
 
 The following sources were very helpful for naming extremely large numbers:
 
-* The blog [Pointless Large Number Stuff](https://sites.google.com/site/pointlesslargenumberstuff/home/1/extendedillions1) by cookiefonster informed the naming of numbers larger than 1,000,000
+* The blog [Pointless Large Number Stuff](https://sites.google.com/site/pointlesslargenumberstuff/home/1/extendedillions1) by @cookiefonster informed the naming of numbers larger than 1,000,000
 * Robert Munafo's writing on the [Conway-Wechsler system](https://www.mrob.com/pub/math/largenum.html#conway-wechsler) for
-naming arbitrarily large numbers was used for the naming of numbers greater than 10^3003
-* Steve Olsen's table of ["Big-Ass Numbers"](https://www.olsenhome.com/bignumbers/) was very helpful for testing `number_friendly()`
+naming arbitrarily large numbers was used for the naming of numbers 10^3003 and larger
+* Steve Olsen's table of ["Big-Ass Numbers"](https://www.olsenhome.com/bignumbers/) was used for testing `number_friendly()`
