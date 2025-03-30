@@ -7,7 +7,7 @@
 \usage{
 nth_friendly(
   numbers,
-  zero = "zeroth",
+  zero = "0th",
   na = "missingth",
   nan = "not a numberth",
   inf = "infinitieth",
