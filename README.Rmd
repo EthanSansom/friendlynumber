@@ -1,0 +1,215 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# friendlynumber
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+{friendlynumber} translates vectors of numbers into character vectors of 
+English numerals (AKA number words). Supported numerals include:
+
+* Cardinals: one, ten and two thirds, one thousand twenty-one
+* Ordinals: first, second, one millionth, 1st, 2nd, 1,000,000th
+* Counts: no times, once, twice, three times
+* Quantifiers: no, the, both, all three, all 999, every
+
+{friendlynumber} functions are intended to be used internally by other functions
+(e.g. for generating friendly error messages). To this end, {friendlynumber} is
+writing in base R and has no Imports.
+
+## Installation
+
+You can install the development version of {friendlynumber} from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("EthanSansom/friendlynumber")
+```
+
+## Features
+
+```{r load-pkg}
+library(friendlynumber)
+```
+
+### Cardinal Numerals
+
+`number_friendly()` is an S3 generic which converts numbers in `R` into cardinal numerals.
+
+```{r number-friendly}
+number_friendly(c(0:3, 2/3, 1/100, NA, NaN, Inf))
+```
+
+`number_friendly()` currently defines methods for four types of numbers:
+
+* Base `<integer>` vectors
+* Base `<numeric>` vectors
+* [{bignum}](https://davidchall.github.io/bignum/) `<bignum_biginteger>` vectors, which can store arbitrarily large integers
+* {bignum} `<bignum_bigfloat>` vectors, which store numbers with 50 decimal digits of precision
+
+Each method has a corresponding standalone `*_friendly()` function which expects 
+a number of a specific class.
+
+```{r number-friendly-methods}
+number_friendly(1L)                     # integerish_friendly()
+number_friendly(1.0)                    # numeric_friendly()
+number_friendly(bignum::biginteger(1L)) # biginteger_friendly()
+number_friendly(bignum::bigfloat(1.0))  # bigfloat_friendly()
+```
+
+### Other Numerals
+
+{friendlynumber} provides an additional set of functions for translating whole
+numbers (e.g. `1L` or `1.00`) into common numeral types.
+
+```{r whole-friendly}
+# Ordinals
+ordinal_friendly(0:5)
+
+# Numeric Ordinals
+nth_friendly(0:5)
+
+# Counts
+ntimes_friendly(0:5)
+
+# Quantifiers
+quantifier_friendly(0:5)
+```
+
+### Precision
+
+{friendlynumber} provides two `options()` for setting the number of decimals
+that {friendlynumber} function report.
+
+```{r preserve-opts, include = FALSE}
+opts <- options()
+```
+
+```{r opts}
+options(
+  friendlynumber.numeric.digits = 3, # Effects `<numeric>` numbers
+  friendlynumber.bigfloat.digits = 5 # Effects `<bignum_bigfloat>` numbers
+)
+
+numeric_friendly(0.12345)
+bigfloat_friendly(bignum::bigfloat(0.12345))
+```
+
+`format_number()` is a utility function which formats numbers via `format()` and
+abides by these options.
+
+```{r format-number}
+format_number(0.12345)
+format_number(bignum::bigfloat(0.12345))
+```
+
+This is useful for verifying whether unexpected results are a consequence of
+precision issues. For instance, look what happens when we attempt to translate
+the number "ten billion and one hundred-thousandth".
+
+```{r precision-issue}
+options(
+  friendlynumber.numeric.digits = 7, 
+  friendlynumber.bigfloat.digits = 7
+)
+
+numeric_friendly(10000000000.00001)
+bigfloat_friendly(bignum::bigfloat("10000000000.00001"))
+```
+
+We can use `format_number()` to confirm that, on my machine, a `<numeric>` 
+vector lacks the precision to store this number accurately.
+
+```{r precision-check}
+format_number(10000000000.00001)
+format_number(bignum::bigfloat("10000000000.00001"))
+```
+
+Similar problems can arise when working with whole numbers. Consider the number
+"ten quadrillion" minus one.
+
+```{r whole-precision}
+numeric_friendly(10000000000000000 - 1)
+biginteger_friendly(bignum::biginteger("10000000000000000") - 1L)
+```
+
+## Advantages
+
+{friendlynumber} is faster than other alternatives written in base R - such as
+the [{english}](https://cran.r-project.org/web/packages/english/index.html) and 
+[{nombre}](https://nombre.rossellhayes.com/) packages.
+
+```{r}
+# Scalar (small)
+bench::mark(
+  english = as.character(english::english(1L)),
+  nombre = as.character(nombre::nom_card(1L)),
+  friendlynumber = as.character(number_friendly(1L))
+)[1:6]
+
+# Scalar (large)
+bench::mark(
+  english = as.character(english::english(100000)),
+  nombre = as.character(nombre::nom_card(100000)),
+  friendlynumber = as.character(number_friendly(100000))
+)[1:6]
+
+# Vector
+bench::mark(
+  english = as.character(english::english(1:10000)),
+  nombre = as.character(nombre::nom_card(1:10000)),
+  friendlynumber = as.character(integerish_friendly(1:10000)),
+  filter_gc = FALSE
+)[1:6]
+```
+
+To increase the speed of processing scalar inputs, the set of `*_friendly()` 
+functions do not check that their arguments are of valid types. All
+`*_friendly()` functions have a (very-slightly) slower `*_friendly_safe()` 
+alternative which confirms that it's arguments are of the correct type and 
+emits an informative error otherwise.
+
+```{r safe}
+try(integerish_friendly_safe(1/2))
+```
+
+When used with the {bignum} package, {friendlynumber} is capable of translating
+extremely large numbers into cardinal numerals. Here, we translate a number equal
+to 1 followed by three thousand and three 0's.
+
+```{r millinillion}
+number_friendly(bignum::biginteger(10L)^3003L)
+```
+
+## Inspiration
+
+This package was originally inspired by the [{english}](https://cran.r-project.org/web/packages/english/index.html)
+package by John Fox, Bill Venables, Anthony Damico and Anne Pier Salverda, which 
+spurred my brief fixation with the programming puzzle of converting numbers to 
+numerals.
+
+Several functions in {friendlynumber} were inspired by Alexander Rossell Hayes'
+[{nombre}](https://nombre.rossellhayes.com/) package:
+
+* `ntimes_friendly()` is based on [nombre::adverbial()](https://nombre.rossellhayes.com/reference/adverbial.html)
+* `quantifier_friendly()` is based on [nombre::collective()](https://nombre.rossellhayes.com/reference/collective.html)
+
+The following sources were very helpful for naming extremely large numbers:
+
+* The blog [Pointless Large Number Stuff](https://sites.google.com/site/pointlesslargenumberstuff/home/1/extendedillions1) by cookiefonster informed the naming of numbers larger than 1,000,000
+* Robert Munafo's writing on the [Conway-Wechsler system](https://www.mrob.com/pub/math/largenum.html#conway-wechsler) for
+naming arbitrarily large numbers was used for the naming of numbers greater than 10^3003
+* Steve Olsen's table of ["Big-Ass Numbers"](https://www.olsenhome.com/bignumbers/) was very helpful for testing `number_friendly()`
