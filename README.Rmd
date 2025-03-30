@@ -159,24 +159,30 @@ biginteger_friendly(bignum::biginteger("10000000000000000") - 1L)
 the [{english}](https://cran.r-project.org/web/packages/english/index.html) and 
 [{nombre}](https://nombre.rossellhayes.com/) packages.
 
-```{r}
+```{r benchmarks-scalar-small}
 # Scalar (small)
 bench::mark(
   english = as.character(english::english(1L)),
   nombre = as.character(nombre::nom_card(1L)),
   friendlynumber = as.character(number_friendly(1L))
 )[1:6]
+```
+
+```{r benchmarks-scalar-large}
 # Scalar (large)
 bench::mark(
   english = as.character(english::english(100000)),
   nombre = as.character(nombre::nom_card(100000)),
   friendlynumber = as.character(number_friendly(100000))
 )[1:6]
+```
+
+```{r benchmarks-vector}
 # Vector
 bench::mark(
   english = as.character(english::english(1:10000)),
   nombre = as.character(nombre::nom_card(1:10000)),
-  friendlynumber = as.character(integerish_friendly(1:10000)),
+  friendlynumber = as.character(number_friendly(1:10000)),
   filter_gc = FALSE
 )[1:6]
 ```
@@ -188,7 +194,7 @@ alternative which confirms that it's arguments are of the correct type and
 emits an informative error otherwise.
 
 ```{r safe}
-try(integerish_friendly_safe(1/2))
+try(integerish_friendly_safe(numbers = 1/2))
 ```
 
 When used with the {bignum} package, {friendlynumber} is capable of translating

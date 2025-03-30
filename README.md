@@ -177,9 +177,12 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english          89.1µs  93.28µs    10476.     140KB     33.8
-#> 2 nombre            120µs 126.89µs     7651.     685KB     29.4
-#> 3 friendlynumber    6.6µs   7.34µs   128386.        0B     38.5
+#> 1 english         88.64µs  93.52µs    10406.     140KB     33.9
+#> 2 nombre         120.46µs 124.72µs     7877.     685KB     29.3
+#> 3 friendlynumber   6.64µs   7.22µs   134921.        0B     40.5
+```
+
+``` r
 # Scalar (large)
 bench::mark(
   english = as.character(english::english(100000)),
@@ -189,22 +192,25 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english         175.3µs    180µs     5450.    8.26KB     25.1
-#> 2 nombre            126µs    131µs     7479.        0B     33.8
-#> 3 friendlynumber   34.6µs     36µs    27355.        0B     30.1
+#> 1 english           175µs  179.2µs     5527.    8.26KB     25.0
+#> 2 nombre          125.9µs    130µs     7548.        0B     31.6
+#> 3 friendlynumber   34.6µs   36.1µs    27232.        0B     30.0
+```
+
+``` r
 # Vector
 bench::mark(
   english = as.character(english::english(1:10000)),
   nombre = as.character(nombre::nom_card(1:10000)),
-  friendlynumber = as.character(integerish_friendly(1:10000)),
+  friendlynumber = as.character(number_friendly(1:10000)),
   filter_gc = FALSE
 )[1:6]
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english           1.25s    1.25s     0.801    2.34MB    12.8 
-#> 2 nombre           45.1ms  47.91ms    21.0     11.43MB    13.4 
-#> 3 friendlynumber   8.92ms    9.2ms   103.       3.87MB     7.90
+#> 1 english           1.25s    1.25s     0.800    2.34MB    12.8 
+#> 2 nombre          44.94ms  47.34ms    21.3     11.43MB    11.6 
+#> 3 friendlynumber   8.89ms   9.12ms   104.       3.87MB     7.88
 ```
 
 To increase the speed of processing scalar inputs, the set of
@@ -214,7 +220,7 @@ types. All `*_friendly()` functions have a slightly slower
 of the correct type and emits an informative error otherwise.
 
 ``` r
-try(integerish_friendly_safe(1/2))
+try(integerish_friendly_safe(numbers = 1/2))
 #> Error : `numbers` must be coercible to an integer without loss of precision.
 ```
 
