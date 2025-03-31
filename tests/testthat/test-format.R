@@ -50,3 +50,8 @@ test_that("format_number.bignum_biginteger() works", {
   expect_equal(format_number(bignum::biginteger(c(1, 123, 1234))), c("1", "123", "1,234"))
   expect_equal(format_number(bignum::biginteger(-c(1, 123, 1234))), c("-1", "-123", "-1,234"))
 })
+
+test_that("`format_number()` raises an error on invalid types", {
+  expect_error(format_number("A"), class = "friendlynumber_error_input_type")
+  expect_error(format_number(data.frame()), class = "friendlynumber_error_input_type")
+})

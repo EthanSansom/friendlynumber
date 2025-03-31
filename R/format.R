@@ -149,9 +149,11 @@ format_whole.bignum_biginteger <- function(x, bigmark = TRUE, ...) {
   out
 }
 
+# nocov start
 format_whole.default <- function(x, ...) {
   stop_unimplemented_method(x, "format_whole()")
 }
+# nocov end
 
 # fractional -------------------------------------------------------------------
 
@@ -176,6 +178,8 @@ format_fractional.bignum_bigfloat <- function(x, ...) {
   substr(out, 3, nchar(out))
 }
 
+# nocov start
 format_fractional.default <- function(x, ...) {
   stop_unimplemented_method(x, "format_fractional()")
 }
+# nocov end
