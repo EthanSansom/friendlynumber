@@ -40,16 +40,16 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'integer'</span></span>
-<span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, bigmark <span class="op">=</span> <span class="st">","</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, bigmark <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'bignum_biginteger'</span></span>
-<span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, bigmark <span class="op">=</span> <span class="st">","</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, bigmark <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'numeric'</span></span>
-<span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, bigmark <span class="op">=</span> <span class="st">","</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, bigmark <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'bignum_bigfloat'</span></span>
-<span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, bigmark <span class="op">=</span> <span class="st">","</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, bigmark <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">format_number</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -99,7 +99,7 @@ this, <code>format_number()</code> is useful for verifying that the output of th
 <span class="r-in"><span><span class="fu">format_number</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">1001L</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1"     "2"     "1,001"</span>
 <span class="r-in"><span><span class="fu">format_number</span><span class="op">(</span><span class="fl">1001L</span>, bigmark <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1FALSE001"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1001"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Set `friendlynumber.numeric.digits` to control the decimal output</span></span></span>
 <span class="r-in"><span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="op">)</span></span></span>
