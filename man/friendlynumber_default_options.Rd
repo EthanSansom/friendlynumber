@@ -2,7 +2,7 @@
 % Please edit documentation in R/options.R
 \name{friendlynumber_default_options}
 \alias{friendlynumber_default_options}
-\title{Get the default options set by the {friendlynumber} package}
+\title{Get the default options set by the friendlynumber package}
 \usage{
 friendlynumber_default_options()
 }
@@ -10,8 +10,8 @@ friendlynumber_default_options()
 A named list of options.
 }
 \description{
-Returns a list of options provided to \code{options()} when the {friendlynumber}
-package is loaded. Options set prior to loading the {friendlynumber} package
+Returns a list of options provided to \code{options()} when the friendlynumber
+package is loaded. Options set prior to loading the friendlynumber package
 are not overwritten on load.
 }
 \examples{
