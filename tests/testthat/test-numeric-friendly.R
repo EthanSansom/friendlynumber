@@ -28,6 +28,14 @@ test_that("`numeric_friendly()` works", {
       "negative nine hundred ninety-nine and one hundred twenty-three thousandths"
     )
   )
+  expect_equal(
+    numeric_friendly(9999:10005),
+    c(
+      "nine thousand nine hundred ninety-nine", "ten thousand", "ten thousand one",
+      "ten thousand two", "ten thousand three", "ten thousand four",
+      "ten thousand five"
+    )
+  )
   # Special numbers
   expect_equal(
     numeric_friendly(c(-Inf, Inf, 0, NA, NaN)),

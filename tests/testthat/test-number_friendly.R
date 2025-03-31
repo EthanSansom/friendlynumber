@@ -32,3 +32,10 @@ test_that("`number_friendly_safe()` works", {
   expect_error(number_friendly_safe(int, and = NA), class = "friendlynumber_error_input_type")
   expect_error(number_friendly_safe(num, decimal = c("a", "b")), class = "friendlynumber_error_input_type")
 })
+
+test_that("`number_friendly()` and `number_friendly_safe()` error on unimplemented types", {
+  expect_error(number_friendly(TRUE), class = "friendlynumber_error_input_type")
+  expect_error(number_friendly("A"), class = "friendlynumber_error_input_type")
+  expect_error(number_friendly_safe(TRUE), class = "friendlynumber_error_input_type")
+  expect_error(number_friendly_safe("A"), class = "friendlynumber_error_input_type")
+})
