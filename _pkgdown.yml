@@ -2,3 +2,23 @@ url: https://ethansansom.github.io/friendlynumber/
 template:
   bootstrap: 5
 
+reference:
+- title: Cardinal numeral translators
+- contents:
+  - number_friendly
+  - integerish_friendly
+  - numeric_friendly
+  - biginteger_friendly
+  - bigfloat_friendly
+
+- title: Other numeral translators
+- contents:
+  - ordinal_friendly
+  - quantifier_friendly
+  - nth_friendly
+  - ntimes_friendly
+
+- title: Helpers
+- contents:
+  - format_number
+  - friendlynumber_default_options
