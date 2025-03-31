@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Codecov test coverage](https://codecov.io/gh/EthanSansom/friendlynumber/graph/badge.svg)](https://app.codecov.io/gh/EthanSansom/friendlynumber)
+[![R-CMD-check](https://github.com/EthanSansom/friendlynumber/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EthanSansom/friendlynumber/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 {friendlynumber} translates vectors of numbers into character vectors of 

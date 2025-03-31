@@ -7,6 +7,7 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/EthanSansom/friendlynumber/graph/badge.svg)](https://app.codecov.io/gh/EthanSansom/friendlynumber)
+[![R-CMD-check](https://github.com/EthanSansom/friendlynumber/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EthanSansom/friendlynumber/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 {friendlynumber} translates vectors of numbers into character vectors of
@@ -180,9 +181,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english         89.58µs  92.33µs    10697.     140KB     33.8
-#> 2 nombre         120.66µs 124.97µs     7832.     685KB     31.5
-#> 3 friendlynumber   6.72µs   7.42µs   131498.        0B     39.5
+#> 1 english         89.95µs  93.89µs    10370.     140KB     33.9
+#> 2 nombre         120.62µs 124.68µs     7878.     685KB     29.3
+#> 3 friendlynumber   6.64µs   7.26µs   131581.        0B     39.5
 ```
 
 ``` r
@@ -195,9 +196,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english           175µs  178.8µs     5538.    8.26KB     25.0
-#> 2 nombre          125.9µs  129.6µs     7607.        0B     33.9
-#> 3 friendlynumber   34.6µs   35.9µs    27493.        0B     30.3
+#> 1 english         174.5µs  179.2µs     5497.    8.26KB     25.0
+#> 2 nombre          125.1µs  129.7µs     7605.        0B     31.7
+#> 3 friendlynumber   34.6µs   36.2µs    27124.        0B     29.9
 ```
 
 ``` r
@@ -211,9 +212,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english           1.25s    1.25s     0.800    2.34MB    12.0 
-#> 2 nombre          44.99ms  47.94ms    21.2     11.43MB    13.5 
-#> 3 friendlynumber   8.89ms   9.02ms   106.       3.87MB     7.99
+#> 1 english           1.28s    1.28s     0.783    2.34MB    12.5 
+#> 2 nombre          45.24ms  48.65ms    20.4     11.43MB    11.1 
+#> 3 friendlynumber    9.1ms  10.32ms    92.7      3.87MB     7.89
 ```
 
 To increase the speed of processing scalar inputs, the set of
