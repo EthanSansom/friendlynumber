@@ -27,8 +27,7 @@ test_that("Huge numbers are supported", {
   skip_on_cran()
   skip_if_not_installed("bignum")
 
-  # TODO: Add these back later, they're annoyingly slow for interactive tests
-  skip("Skipping slow <bignum_biginteger> tests")
+  # skip("Skipping slow <bignum_biginteger> tests")
 
   millinillion <- bignum::biginteger(10L)^3003L
   expect_equal(biginteger_friendly(millinillion), "one millinillion")
