@@ -2,9 +2,21 @@
 % Please edit documentation in R/ordinal-friendly.R
 \name{ordinal_friendly}
 \alias{ordinal_friendly}
+\alias{ordinal_friendly_safe}
 \title{Translate integer-ish numbers to an ordinal character vector}
 \usage{
 ordinal_friendly(
+  numbers,
+  zero = "zeroth",
+  na = "missingth",
+  nan = "not a numberth",
+  inf = "infinitieth",
+  negative = "negative ",
+  and = FALSE,
+  hyphenate = TRUE
+)
+
+ordinal_friendly_safe(
   numbers,
   zero = "zeroth",
   na = "missingth",

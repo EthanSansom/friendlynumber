@@ -2,9 +2,24 @@
 % Please edit documentation in R/ntimes-friendly.R
 \name{ntimes_friendly}
 \alias{ntimes_friendly}
+\alias{ntimes_friendly_safe}
 \title{Translate integer-ish numbers to a character vector of counts (once, twice, three times)}
 \usage{
 ntimes_friendly(
+  numbers,
+  one = "once",
+  two = "twice",
+  three = "three times",
+  zero = "no times",
+  na = "an unknown number of times",
+  nan = "an undefined number of times",
+  inf = "infinite times",
+  negative = "negative ",
+  and = FALSE,
+  hyphenate = TRUE
+)
+
+ntimes_friendly_safe(
   numbers,
   one = "once",
   two = "twice",

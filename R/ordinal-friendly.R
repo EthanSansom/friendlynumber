@@ -80,6 +80,8 @@ ordinal_friendly <- function(
   out
 }
 
+#' @rdname ordinal_friendly
+#' @export
 ordinal_friendly_safe <- function(
     numbers,
     zero = "zeroth",

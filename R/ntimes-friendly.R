@@ -98,6 +98,8 @@ ntimes_friendly <- function(
   out
 }
 
+#' @rdname ntimes_friendly
+#' @export
 ntimes_friendly_safe <- function(
     numbers,
     one = "once",
