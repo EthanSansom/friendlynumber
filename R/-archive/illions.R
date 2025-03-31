@@ -1,7 +1,10 @@
 # comments ---------------------------------------------------------------------
 
 # These functions aren't exported or used, but I use them (`nice_illions()` in
-# particular) to generate the `english$illions` so I'm leaving them here for now.
+# particular) to generate the `english$illions`. `nice_illions()` describes the
+# rules for creating an "-illion" number word using Conway and Guy's system,
+# while the `english_illions()` algorithm is more opaque. I'm leavung these here
+# as a reminder of the underlying -illions naming system.
 
 # illions ----------------------------------------------------------------------
 
