@@ -1,6 +1,7 @@
 ^friendlynumber\.Rproj$
 ^\.Rproj\.user$
 ^R/-benchmarks$
+^R/-archive$
 ^LICENSE\.md$
 ^README\.Rmd$
 ^codecov\.yml$
@@ -8,3 +9,4 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.covrignore$
