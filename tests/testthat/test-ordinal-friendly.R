@@ -38,6 +38,13 @@ test_that("`ordinal_friendly()` works", {
       "negative one hundred twentieth"
     )
   )
+  expect_equal(
+    ordinal_friendly(c(1001, 1002, 1003, NA, NaN)),
+    c(
+      "one thousand first", "one thousand second", "one thousand third",
+      "missingth", "not a numberth"
+    )
+  )
   # Special numbers
   expect_equal(
     ordinal_friendly(c(0, NaN, NA, -Inf, Inf, 10)),

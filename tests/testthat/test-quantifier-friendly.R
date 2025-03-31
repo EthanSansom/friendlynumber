@@ -11,10 +11,17 @@ test_that("`quantifier_friendly()` works", {
       "all negative four", "all negative five", "all negative 1,001"
     )
   )
+  expect_equal(
+    quantifier_friendly(c(1001, 1002, 1003, NA, NaN), max_friendly = Inf),
+    c(
+      "all one thousand one", "all one thousand two", "all one thousand three",
+      "a missing", "an undefined"
+    )
+  )
   # Special numbers
   expect_equal(
-    quantifier_friendly(c(0, NaN, NA, -Inf, Inf)),
-    c("no", "an undefined", "a missing", "negative every", "every")
+    quantifier_friendly(c(0, NaN, NA, -Inf, Inf, 10)),
+    c("no", "an undefined", "a missing", "negative every", "every", "all ten")
   )
   # Special number arguments
   expect_equal(
