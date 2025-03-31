@@ -11,13 +11,13 @@
 \usage{
 format_number(x, ...)
 
-\method{format_number}{integer}(x, bigmark = ",", ...)
+\method{format_number}{integer}(x, bigmark = TRUE, ...)
 
-\method{format_number}{bignum_biginteger}(x, bigmark = ",", ...)
+\method{format_number}{bignum_biginteger}(x, bigmark = TRUE, ...)
 
-\method{format_number}{numeric}(x, bigmark = ",", ...)
+\method{format_number}{numeric}(x, bigmark = TRUE, ...)
 
-\method{format_number}{bignum_bigfloat}(x, bigmark = ",", ...)
+\method{format_number}{bignum_bigfloat}(x, bigmark = TRUE, ...)
 
 \method{format_number}{default}(x, ...)
 }

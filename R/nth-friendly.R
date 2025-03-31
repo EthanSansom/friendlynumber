@@ -63,7 +63,7 @@ nth_friendly <- function(
   # 1     -> 1st (but not 11 -> 11st)
   # 2     -> 2nd (but not 12 -> 12nd)
   # 3     -> 3rd
-  out[needs_englishifying] <- format_whole(abs(numbers[needs_englishifying]), bigmark = if (bigmark) "," else "")
+  out[needs_englishifying] <- format_whole(abs(numbers[needs_englishifying]), bigmark = bigmark)
   out[needs_englishifying] <- sub("(?<!1)3th$", "3rd",
                                   sub("(?<!1)2th$", "2nd",
                                       sub("(?<!1)1th$", "1st",

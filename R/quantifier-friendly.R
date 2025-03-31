@@ -92,7 +92,7 @@ quantifier_friendly <- function(
   # Numbers above `max_friendly` get non-english names, e.g. `1000` -> "all 1,000"
   numbers <- abs(numbers)
   bigs <- !(missings | infinites | ones | twos) & numbers > max_friendly
-  out[bigs] <- format_whole(numbers[bigs], bigmark = if (bigmark) "," else "")
+  out[bigs] <- format_whole(numbers[bigs], bigmark = bigmark)
 
   needs_englishifying <- !(infinites | missings | zeros | ones | twos | bigs)
   if (!any(needs_englishifying)) {

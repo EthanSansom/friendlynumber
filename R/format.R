@@ -63,19 +63,19 @@ format_number <- function(x, ...) {
 
 #' @rdname format_number
 #' @export
-format_number.integer <- function(x, bigmark = ",", ...) {
+format_number.integer <- function(x, bigmark = TRUE, ...) {
   format_whole(x, bigmark = bigmark)
 }
 
 #' @rdname format_number
 #' @export
-format_number.bignum_biginteger <- function(x, bigmark = ",", ...) {
+format_number.bignum_biginteger <- function(x, bigmark = TRUE, ...) {
   format_whole(x, bigmark = bigmark)
 }
 
 #' @rdname format_number
 #' @export
-format_number.numeric <- function(x, bigmark = ",", ...) {
+format_number.numeric <- function(x, bigmark = TRUE, ...) {
   negative <- !is.na(x) & x < 0
   x <- abs(x)
   x_trunc <- trunc(x)
@@ -94,7 +94,7 @@ format_number.numeric <- function(x, bigmark = ",", ...) {
 
 #' @rdname format_number
 #' @export
-format_number.bignum_bigfloat <- function(x, bigmark = ",", ...) {
+format_number.bignum_bigfloat <- function(x, bigmark = TRUE, ...) {
   negative <- !is.na(x) & x < 0
   x <- abs(x)
   x_trunc <- trunc(x)
@@ -124,35 +124,27 @@ format_whole <- function(x, ...) {
   UseMethod("format_whole")
 }
 
-format_whole.integer <- function(x, bigmark = ",", ...) {
+format_whole.integer <- function(x, bigmark = TRUE, ...) {
   out <- sprintf("%i", x)
-  out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
-  if (bigmark != ",") out <- gsub(",", bigmark, out, fixed = TRUE)
+  if (bigmark) out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
   out
 }
 
-format_whole.numeric <- function(x, bigmark = ",", ...) {
+format_whole.numeric <- function(x, bigmark = TRUE, ...) {
   # Using `format()` here since `sprintf("%i", ...)` can't handle numbers
   # outside of the maximum integer
-  format(x, scientific = FALSE, big.mark = bigmark, trim = TRUE)
+  format(x, scientific = FALSE, big.mark = if (bigmark) "," else "", trim = TRUE)
 }
 
-format_whole.bignum_bigfloat <- function(x, bigmark = ",", ...) {
+format_whole.bignum_bigfloat <- function(x, bigmark = TRUE, ...) {
   out <- format(x, notation = "dec")
-  if (bigmark != "") {
-    # Use a "," initially in case `bigmark` contains a control sequence
-    out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
-    if (bigmark != ",") out <- gsub(",", bigmark, out, fixed = TRUE)
-  }
+  if (bigmark) out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
   out
 }
 
-format_whole.bignum_biginteger <- function(x, bigmark = ",", ...) {
+format_whole.bignum_biginteger <- function(x, bigmark = TRUE, ...) {
   out <- format(x, notation = "dec")
-  if (bigmark != "") {
-    out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
-    if (bigmark != ",") out <- gsub(",", bigmark, out, fixed = TRUE)
-  }
+  if (bigmark) out <- gsub("(\\d)(?=(\\d{3})+$)", "\\1,", out, perl = TRUE)
   out[is.na(out)] <- "NA" # `format.bignum_biginteger(NA)` is `NA`, not "NA"
   out
 }
