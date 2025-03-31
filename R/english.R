@@ -940,7 +940,7 @@ get_english_suffix <- function(iteration) {
   if (iteration > length(english$suffixes)) {
     # When `iteration == 2L` we're at the thousands place, whereas
     # `english_illions(2L)` is a "million".
-    paste0(" ", english_illions(iteration - 1L))
+    paste0(" ", english_illions(iteration - 1L)) # nocov
   } else {
     english$suffixes[iteration]
   }
@@ -1058,22 +1058,6 @@ english_fractionals.bignum_bigfloat <- function(
     ifelse(grepl("(0|\\.)1$", fractional_characters[fracs]), "th", "ths")
   )
   out
-}
-
-# Turns "0.0123" into "zero one two three" as in "zero point zero one two three"
-english_points <- function(fractionals, zero = "zero") {
-  fractional_characters <- format_fractional(fractionals)
-  trimws(
-    gsub("0", paste0(trimws(zero), " "),
-      gsub("1", "one ",
-          gsub("2", "two ",
-              gsub("3", "three ",
-                  gsub("4", "four ",
-                      gsub("5", "five ",
-                          gsub("6", "six ",
-                              gsub("7", "seven ",
-                                  gsub("8", "eight ",
-                                      gsub("9", "nine ", fractional_characters)))))))))))
 }
 
 # formatters -------------------------------------------------------------------
