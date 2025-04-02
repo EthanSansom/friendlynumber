@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Translate numbers into English numerals • friendlynumber</title>
+<title>Translate Numbers into Number Words • friendlynumber</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Translate numbers into English numerals">
-<meta name="description" content="Converts number vectors to character vectors of numerals, including cardinals (one, two, three) and ordinals (first, second, third). Supports negative numbers, fractions, and arbitrary-precision integer and high-precision floating-point vectors provided by the {bignum} package.">
-<meta property="og:description" content="Converts number vectors to character vectors of numerals, including cardinals (one, two, three) and ordinals (first, second, third). Supports negative numbers, fractions, and arbitrary-precision integer and high-precision floating-point vectors provided by the {bignum} package.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Translate Numbers into Number Words">
+<meta name="description" content="Converts vectors of numbers into character vectors of numerals, including cardinals (one, two, three) and ordinals (first, second, third). Supports negative numbers, fractions, and arbitrary-precision integer and high-precision floating-point vectors provided by the bignum package.">
+<meta property="og:description" content="Converts vectors of numbers into character vectors of numerals, including cardinals (one, two, three) and ordinals (first, second, third). Supports negative numbers, fractions, and arbitrary-precision integer and high-precision floating-point vectors provided by the bignum package.">
 <meta property="og:image" content="https://ethansansom.github.io/friendlynumber/logo.svg">
 </head>
 <body>
@@ -33,6 +33,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -48,7 +49,8 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.svg" class="logo" alt=""><h1 id="friendlynumber-">friendlynumber <a class="anchor" aria-label="anchor" href="#friendlynumber-"></a>
+<img src="logo.svg" class="logo" alt=""><h1 id="friendlynumber-">friendlynumber 
+<a class="anchor" aria-label="anchor" href="#friendlynumber-"></a>
 </h1>
 </div>
 <!-- badges: start -->
@@ -64,21 +66,24 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of {friendlynumber} from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>Install the released version from <a href="https://cran.r-project.org/" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"friendlynumber"</span><span class="op">)</span></span></code></pre></div>
+<p>You can install the development version of {friendlynumber} from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"EthanSansom/friendlynumber"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EthanSansom/friendlynumber" class="external-link">friendlynumber</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="cardinal-numerals">Cardinal Numerals<a class="anchor" aria-label="anchor" href="#cardinal-numerals"></a>
 </h3>
 <p><code><a href="reference/number_friendly.html">number_friendly()</a></code> is an S3 generic which converts numbers in <code>R</code> into cardinal numerals.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/number_friendly.html">number_friendly</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">100</span>, <span class="cn">NA</span>, <span class="cn">NaN</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "zero"          "one"           "two"           "three"        </span></span>
 <span><span class="co">#&gt; [5] "two thirds"    "one hundredth" "missing"       "not a number" </span></span>
@@ -90,7 +95,7 @@
 <li>{bignum} <code>&lt;bignum_bigfloat&gt;</code> vectors, which store numbers with 50 decimal digits of precision</li>
 </ul>
 <p>Each method has a corresponding standalone <code>*_friendly()</code> function which expects a number of a specific class.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/number_friendly.html">number_friendly</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span>                     <span class="co"># integerish_friendly()</span></span>
 <span><span class="co">#&gt; [1] "one"</span></span>
 <span><span class="fu"><a href="reference/number_friendly.html">number_friendly</a></span><span class="op">(</span><span class="fl">1.0</span><span class="op">)</span>                    <span class="co"># numeric_friendly()</span></span>
@@ -104,7 +109,7 @@
 <h3 id="other-numerals">Other Numerals<a class="anchor" aria-label="anchor" href="#other-numerals"></a>
 </h3>
 <p>{friendlynumber} provides an additional set of functions for translating whole numbers (e.g. <code>1L</code> or <code>1.00</code>) into common numeral types.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ordinals</span></span>
 <span><span class="fu"><a href="reference/ordinal_friendly.html">ordinal_friendly</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "zeroth" "first"  "second" "third"  "fourth"</span></span>
@@ -125,7 +130,7 @@
 <h3 id="precision">Precision<a class="anchor" aria-label="anchor" href="#precision"></a>
 </h3>
 <p>{friendlynumber} provides two <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> for setting the number of decimals that {friendlynumber} functions report.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
 <span>  friendlynumber.numeric.digits <span class="op">=</span> <span class="fl">3</span>, <span class="co"># Effects `&lt;numeric&gt;` numbers</span></span>
 <span>  friendlynumber.bigfloat.digits <span class="op">=</span> <span class="fl">5</span> <span class="co"># Effects `&lt;bignum_bigfloat&gt;` numbers</span></span>
@@ -136,13 +141,13 @@
 <span><span class="fu"><a href="reference/bigfloat_friendly.html">bigfloat_friendly</a></span><span class="op">(</span><span class="fu">bignum</span><span class="fu">::</span><span class="fu"><a href="https://davidchall.github.io/bignum/reference/bigfloat.html" class="external-link">bigfloat</a></span><span class="op">(</span><span class="fl">0.12345</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "twelve thousand three hundred forty-five hundred-thousandths"</span></span></code></pre></div>
 <p><code><a href="reference/format_number.html">format_number()</a></code> is a utility function which formats numbers via <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> and abides by these options.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/format_number.html">format_number</a></span><span class="op">(</span><span class="fl">0.12345</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "0.123"</span></span>
 <span><span class="fu"><a href="reference/format_number.html">format_number</a></span><span class="op">(</span><span class="fu">bignum</span><span class="fu">::</span><span class="fu"><a href="https://davidchall.github.io/bignum/reference/bigfloat.html" class="external-link">bigfloat</a></span><span class="op">(</span><span class="fl">0.12345</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "0.12345"</span></span></code></pre></div>
 <p>This is useful for verifying whether unexpected results are a consequence of precision issues. For instance, look what happens when we attempt to translate the number “ten billion and one hundred-thousandth”.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
 <span>  friendlynumber.numeric.digits <span class="op">=</span> <span class="fl">7</span>, </span>
 <span>  friendlynumber.bigfloat.digits <span class="op">=</span> <span class="fl">7</span></span>
@@ -153,16 +158,16 @@
 <span><span class="fu"><a href="reference/bigfloat_friendly.html">bigfloat_friendly</a></span><span class="op">(</span><span class="fu">bignum</span><span class="fu">::</span><span class="fu"><a href="https://davidchall.github.io/bignum/reference/bigfloat.html" class="external-link">bigfloat</a></span><span class="op">(</span><span class="st">"10000000000.00001"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ten billion and one hundred-thousandth"</span></span></code></pre></div>
 <p>We can use <code><a href="reference/format_number.html">format_number()</a></code> to confirm that, on my machine, a <code>&lt;numeric&gt;</code> vector lacks the precision to store this number accurately.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/format_number.html">format_number</a></span><span class="op">(</span><span class="fl">10000000000.00001</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "10,000,000,000.0000095"</span></span>
 <span><span class="fu"><a href="reference/format_number.html">format_number</a></span><span class="op">(</span><span class="fu">bignum</span><span class="fu">::</span><span class="fu"><a href="https://davidchall.github.io/bignum/reference/bigfloat.html" class="external-link">bigfloat</a></span><span class="op">(</span><span class="st">"10000000000.00001"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "10,000,000,000.00001"</span></span></code></pre></div>
 <p>Similar problems can arise when working with whole numbers. Consider the number “ten quadrillion” minus one.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/numeric_friendly.html">numeric_friendly</a></span><span class="op">(</span><span class="fl">10000000000000000</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ten quadrillion"</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/biginteger_friendly.html">biginteger_friendly</a></span><span class="op">(</span><span class="fu">bignum</span><span class="fu">::</span><span class="fu"><a href="https://davidchall.github.io/bignum/reference/biginteger.html" class="external-link">biginteger</a></span><span class="op">(</span><span class="st">"10000000000000000"</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine"</span></span></code></pre></div>
 </div>
@@ -170,8 +175,8 @@
 <div class="section level2">
 <h2 id="advantages">Advantages<a class="anchor" aria-label="anchor" href="#advantages"></a>
 </h2>
-<p>{friendlynumber} is faster than other alternatives written in base R - such as the <a href="https://cran.r-project.org/web/packages/english/index.html" class="external-link">{english}</a> and <a href="https://nombre.rossellhayes.com/" class="external-link">{nombre}</a> packages.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p>{friendlynumber} is faster than other alternatives written in base R - such as the <a href="https://CRAN.R-project.org/package=english" class="external-link">{english}</a> and <a href="https://nombre.rossellhayes.com/" class="external-link">{nombre}</a> packages.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scalar (small)</span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
 <span>  english <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu">english</span><span class="fu">::</span><span class="fu">english</span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -181,10 +186,10 @@
 <span><span class="co">#&gt; # A tibble: 3 × 6</span></span>
 <span><span class="co">#&gt;   expression          min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;     &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 english         89.95µs  93.89µs    10370.     140KB     33.9</span></span>
-<span><span class="co">#&gt; 2 nombre         120.62µs 124.68µs     7878.     685KB     29.3</span></span>
-<span><span class="co">#&gt; 3 friendlynumber   6.64µs   7.26µs   131581.        0B     39.5</span></span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; 1 english         89.71µs  94.18µs    10271.     140KB     33.9</span></span>
+<span><span class="co">#&gt; 2 nombre         120.42µs 124.64µs     7915.     685KB     31.5</span></span>
+<span><span class="co">#&gt; 3 friendlynumber   6.68µs   7.26µs   135339.        0B     40.6</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scalar (large)</span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
 <span>  english <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu">english</span><span class="fu">::</span><span class="fu">english</span><span class="op">(</span><span class="fl">100000</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -194,10 +199,10 @@
 <span><span class="co">#&gt; # A tibble: 3 × 6</span></span>
 <span><span class="co">#&gt;   expression          min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;     &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 english         174.5µs  179.2µs     5497.    8.26KB     25.0</span></span>
-<span><span class="co">#&gt; 2 nombre          125.1µs  129.7µs     7605.        0B     31.7</span></span>
-<span><span class="co">#&gt; 3 friendlynumber   34.6µs   36.2µs    27124.        0B     29.9</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; 1 english           174µs  178.3µs     5546.    8.26KB     27.2</span></span>
+<span><span class="co">#&gt; 2 nombre            125µs  131.3µs     7407.        0B     31.7</span></span>
+<span><span class="co">#&gt; 3 friendlynumber   34.7µs   36.6µs    26450.        0B     29.1</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Vector</span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
 <span>  english <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu">english</span><span class="fu">::</span><span class="fu">english</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10000</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -208,22 +213,22 @@
 <span><span class="co">#&gt; # A tibble: 3 × 6</span></span>
 <span><span class="co">#&gt;   expression          min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;     &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 english           1.28s    1.28s     0.783    2.34MB    12.5 </span></span>
-<span><span class="co">#&gt; 2 nombre          45.24ms  48.65ms    20.4     11.43MB    11.1 </span></span>
-<span><span class="co">#&gt; 3 friendlynumber    9.1ms  10.32ms    92.7      3.87MB     7.89</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 english           1.25s    1.25s     0.801    2.34MB    12.8 </span></span>
+<span><span class="co">#&gt; 2 nombre          45.37ms  47.39ms    21.2     11.43MB    11.6 </span></span>
+<span><span class="co">#&gt; 3 friendlynumber   8.94ms   9.14ms   105.       3.87MB     7.92</span></span></code></pre></div>
 <p>To increase the speed of processing scalar inputs, the set of <code>*_friendly()</code> functions do not check that their arguments are of valid types. All <code>*_friendly()</code> functions have a slightly slower <code>*_friendly_safe()</code> alternative which confirms that it’s arguments are of the correct type and emits an informative error otherwise.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="reference/integerish_friendly.html">integerish_friendly_safe</a></span><span class="op">(</span>numbers <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error : `numbers` must be coercible to an integer without loss of precision.</span></span></code></pre></div>
 <p>When used with the {bignum} package, {friendlynumber} is capable of translating extremely large numbers into cardinal numerals. Here, we translate a number equal to 1 followed by three thousand and three 0’s.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/number_friendly.html">number_friendly</a></span><span class="op">(</span><span class="fu">bignum</span><span class="fu">::</span><span class="fu"><a href="https://davidchall.github.io/bignum/reference/biginteger.html" class="external-link">biginteger</a></span><span class="op">(</span><span class="fl">10L</span><span class="op">)</span><span class="op">^</span><span class="fl">3003L</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "one millinillion"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="inspiration">Inspiration<a class="anchor" aria-label="anchor" href="#inspiration"></a>
 </h2>
-<p>This package was originally inspired by the <a href="https://cran.r-project.org/web/packages/english/index.html" class="external-link">{english}</a> package by John Fox, Bill Venables, Anthony Damico and Anne Pier Salverda, which spurred my fixation with the programming puzzle of converting numbers to numerals.</p>
+<p>This package was originally inspired by the <a href="https://CRAN.R-project.org/package=english" class="external-link">{english}</a> package by John Fox, Bill Venables, Anthony Damico and Anne Pier Salverda, which inspired my fixation with the problem of converting numbers to numerals.</p>
 <p>Several functions in {friendlynumber} were inspired by Alexander Rossell Hayes’ <a href="https://nombre.rossellhayes.com/" class="external-link">{nombre}</a> package:</p>
 <ul>
 <li>
@@ -269,7 +274,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Ethan Sansom <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Ethan Sansom <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
 </ul>
 </div>
 
