@@ -82,7 +82,7 @@
 <div class="section level3">
 <h3 id="cardinal-numerals">Cardinal Numerals<a class="anchor" aria-label="anchor" href="#cardinal-numerals"></a>
 </h3>
-<p><code><a href="reference/number_friendly.html">number_friendly()</a></code> is an S3 generic which converts numbers in <code>R</code> into cardinal numerals.</p>
+<p><code><a href="reference/number_friendly.html">number_friendly()</a></code> is an S3 generic which converts numbers into cardinal numerals.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/number_friendly.html">number_friendly</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">100</span>, <span class="cn">NA</span>, <span class="cn">NaN</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "zero"          "one"           "two"           "three"        </span></span>
@@ -186,9 +186,9 @@
 <span><span class="co">#&gt; # A tibble: 3 × 6</span></span>
 <span><span class="co">#&gt;   expression          min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;     &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 english         89.71µs  94.18µs    10271.     140KB     33.9</span></span>
-<span><span class="co">#&gt; 2 nombre         120.42µs 124.64µs     7915.     685KB     31.5</span></span>
-<span><span class="co">#&gt; 3 friendlynumber   6.68µs   7.26µs   135339.        0B     40.6</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 english         89.54µs  92.95µs    10520.     140KB     33.9</span></span>
+<span><span class="co">#&gt; 2 nombre         120.83µs 125.95µs     7666.     685KB     29.4</span></span>
+<span><span class="co">#&gt; 3 friendlynumber   6.64µs   7.26µs   134666.        0B     40.4</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scalar (large)</span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
@@ -199,9 +199,9 @@
 <span><span class="co">#&gt; # A tibble: 3 × 6</span></span>
 <span><span class="co">#&gt;   expression          min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;     &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 english           174µs  178.3µs     5546.    8.26KB     27.2</span></span>
-<span><span class="co">#&gt; 2 nombre            125µs  131.3µs     7407.        0B     31.7</span></span>
-<span><span class="co">#&gt; 3 friendlynumber   34.7µs   36.6µs    26450.        0B     29.1</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 english         174.3µs    179µs     5498.    8.26KB     27.2</span></span>
+<span><span class="co">#&gt; 2 nombre          126.2µs  130.6µs     7468.        0B     31.7</span></span>
+<span><span class="co">#&gt; 3 friendlynumber   34.7µs   36.2µs    27136.        0B     29.9</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Vector</span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
@@ -213,9 +213,9 @@
 <span><span class="co">#&gt; # A tibble: 3 × 6</span></span>
 <span><span class="co">#&gt;   expression          min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;     &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 english           1.25s    1.25s     0.801    2.34MB    12.8 </span></span>
-<span><span class="co">#&gt; 2 nombre          45.37ms  47.39ms    21.2     11.43MB    11.6 </span></span>
-<span><span class="co">#&gt; 3 friendlynumber   8.94ms   9.14ms   105.       3.87MB     7.92</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 english           1.24s    1.24s     0.804    2.34MB    12.1 </span></span>
+<span><span class="co">#&gt; 2 nombre           45.4ms  47.82ms    20.8     11.43MB    11.4 </span></span>
+<span><span class="co">#&gt; 3 friendlynumber   8.91ms    9.2ms   105.       3.87MB     7.89</span></span></code></pre></div>
 <p>To increase the speed of processing scalar inputs, the set of <code>*_friendly()</code> functions do not check that their arguments are of valid types. All <code>*_friendly()</code> functions have a slightly slower <code>*_friendly_safe()</code> alternative which confirms that it’s arguments are of the correct type and emits an informative error otherwise.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="reference/integerish_friendly.html">integerish_friendly_safe</a></span><span class="op">(</span>numbers <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
