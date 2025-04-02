@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# friendlynumber <img src="man/figures/logo.png" align="right" height="139" alt="" />
+# friendlynumber <a href="https://ethansansom.github.io/friendlynumber/"><img src="man/figures/logo.png" align="right" height="139" alt="friendlynumber website" /></a>
 
 <!-- badges: start -->
 
@@ -23,6 +23,13 @@ packages (e.g. for generating friendly error messages). To this end,
 {friendlynumber} is written in base R and has no Imports.
 
 ## Installation
+
+Install the released version from [CRAN](https://cran.r-project.org/)
+with:
+
+``` r
+install.packages("friendlynumber")
+```
 
 You can install the development version of {friendlynumber} from
 [GitHub](https://github.com/) with:
@@ -167,9 +174,8 @@ biginteger_friendly(bignum::biginteger("10000000000000000") - 1L)
 ## Advantages
 
 {friendlynumber} is faster than other alternatives written in base R -
-such as the
-[{english}](https://cran.r-project.org/web/packages/english/index.html)
-and [{nombre}](https://nombre.rossellhayes.com/) packages.
+such as the [{english}](https://CRAN.R-project.org/package=english) and
+[{nombre}](https://nombre.rossellhayes.com/) packages.
 
 ``` r
 # Scalar (small)
@@ -181,9 +187,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english         89.95µs  93.89µs    10370.     140KB     33.9
-#> 2 nombre         120.62µs 124.68µs     7878.     685KB     29.3
-#> 3 friendlynumber   6.64µs   7.26µs   131581.        0B     39.5
+#> 1 english         89.71µs  94.18µs    10271.     140KB     33.9
+#> 2 nombre         120.42µs 124.64µs     7915.     685KB     31.5
+#> 3 friendlynumber   6.68µs   7.26µs   135339.        0B     40.6
 ```
 
 ``` r
@@ -196,9 +202,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english         174.5µs  179.2µs     5497.    8.26KB     25.0
-#> 2 nombre          125.1µs  129.7µs     7605.        0B     31.7
-#> 3 friendlynumber   34.6µs   36.2µs    27124.        0B     29.9
+#> 1 english           174µs  178.3µs     5546.    8.26KB     27.2
+#> 2 nombre            125µs  131.3µs     7407.        0B     31.7
+#> 3 friendlynumber   34.7µs   36.6µs    26450.        0B     29.1
 ```
 
 ``` r
@@ -212,9 +218,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english           1.28s    1.28s     0.783    2.34MB    12.5 
-#> 2 nombre          45.24ms  48.65ms    20.4     11.43MB    11.1 
-#> 3 friendlynumber    9.1ms  10.32ms    92.7      3.87MB     7.89
+#> 1 english           1.25s    1.25s     0.801    2.34MB    12.8 
+#> 2 nombre          45.37ms  47.39ms    21.2     11.43MB    11.6 
+#> 3 friendlynumber   8.94ms   9.14ms   105.       3.87MB     7.92
 ```
 
 To increase the speed of processing scalar inputs, the set of
@@ -240,10 +246,9 @@ number_friendly(bignum::biginteger(10L)^3003L)
 ## Inspiration
 
 This package was originally inspired by the
-[{english}](https://cran.r-project.org/web/packages/english/index.html)
-package by John Fox, Bill Venables, Anthony Damico and Anne Pier
-Salverda, which spurred my fixation with the programming puzzle of
-converting numbers to numerals.
+[{english}](https://CRAN.R-project.org/package=english) package by John
+Fox, Bill Venables, Anthony Damico and Anne Pier Salverda, which
+inspired my fixation with the problem of converting numbers to numerals.
 
 Several functions in {friendlynumber} were inspired by Alexander Rossell
 Hayes’ [{nombre}](https://nombre.rossellhayes.com/) package:

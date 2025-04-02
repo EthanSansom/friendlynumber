@@ -11,7 +11,7 @@
 #'
 #' @inheritParams params
 #'
-#' @returns
+#' @return
 #'
 #' A non-NA character vector of the same length as `numbers`.
 #'

@@ -1,12 +1,15 @@
 Package: friendlynumber
-Title: Translate numbers into English numerals
+Title: Translate Numbers into Number Words
 Version: 0.0.0.9000
 Authors@R: person(
   "Ethan", "Sansom", 
   email = "ethan.sansom29@gmail.com",
-  role = c("aut", "cre")
+  role = c("aut", "cre", "cph")
   )
-Description: Converts number vectors to character vectors of numerals, including cardinals (one, two, three) and ordinals (first, second, third). Supports negative numbers, fractions, and arbitrary-precision integer and high-precision floating-point vectors provided by the {bignum} package.
+Description: Converts vectors of numbers into character vectors of numerals,
+    including cardinals (one, two, three) and ordinals (first, second, third). 
+    Supports negative numbers, fractions, and arbitrary-precision integer and 
+    high-precision floating-point vectors provided by the 'bignum' package.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

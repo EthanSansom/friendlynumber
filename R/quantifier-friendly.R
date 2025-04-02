@@ -20,7 +20,7 @@
 #' Use the `bigmark` argument to determine whether these formatted numbers
 #' are comma separated (e.g. `"all 1,000"` vs. `"all 1000"`).
 #'
-#' @returns
+#' @return
 #'
 #' A non-NA character vector of the same length as `numbers`.
 #'

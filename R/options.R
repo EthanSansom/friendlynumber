@@ -6,17 +6,13 @@
 #' package is loaded. Options set prior to loading the friendlynumber package
 #' are not overwritten on load.
 #'
-#' @returns
+#' @return
 #'
 #' A named list of options.
 #'
 #' @examples
 #' friendlynumber_default_options()
 #'
-#' # Reset the package options
-#' if (FALSE) {
-#'   options(friendlynumber_default_options())
-#' }
 #' @export
 # nocov start
 friendlynumber_default_options <- function() {

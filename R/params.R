@@ -98,13 +98,15 @@
 #' translations. In this case `1 / 2` is translated as `"five tenths"` instead
 #' of `"one half"`.
 #'
-#' @returns
+#' @return
 #'
-#' A non-NA character vector of the same length as `numbers`.
+#' The value `NULL`.
 #'
 #' @keywords internal
 #' @aliases parameters arguments args
 #' @usage NULL
+#' @examples
+#' params()
 # nocov start
 params <- function(...) NULL
 # nocov end

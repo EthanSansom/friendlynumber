@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# friendlynumber <img src="man/figures/logo.png" align="right" height="139" alt="" />
+# friendlynumber <a href="https://ethansansom.github.io/friendlynumber/"><img src="man/figures/logo.png" align="right" height="139" alt="friendlynumber website" /></a>
 
 <!-- badges: start -->
 [![Codecov test coverage](https://codecov.io/gh/EthanSansom/friendlynumber/graph/badge.svg)](https://app.codecov.io/gh/EthanSansom/friendlynumber)
@@ -33,6 +33,12 @@ English numerals (AKA number words). Supported numerals include:
 written in base R and has no Imports.
 
 ## Installation
+
+Install the released version from [CRAN](https://cran.r-project.org/) with:
+
+```r
+install.packages("friendlynumber")
+```
 
 You can install the development version of {friendlynumber} from [GitHub](https://github.com/) with:
 
@@ -158,7 +164,7 @@ biginteger_friendly(bignum::biginteger("10000000000000000") - 1L)
 ## Advantages
 
 {friendlynumber} is faster than other alternatives written in base R - such as
-the [{english}](https://cran.r-project.org/web/packages/english/index.html) and 
+the [{english}](https://CRAN.R-project.org/package=english) and 
 [{nombre}](https://nombre.rossellhayes.com/) packages.
 
 ```{r benchmarks-scalar-small}
@@ -209,10 +215,9 @@ number_friendly(bignum::biginteger(10L)^3003L)
 
 ## Inspiration
 
-This package was originally inspired by the [{english}](https://cran.r-project.org/web/packages/english/index.html)
+This package was originally inspired by the [{english}](https://CRAN.R-project.org/package=english)
 package by John Fox, Bill Venables, Anthony Damico and Anne Pier Salverda, which 
-spurred my fixation with the programming puzzle of converting numbers to 
-numerals.
+inspired my fixation with the problem of converting numbers to numerals.
 
 Several functions in {friendlynumber} were inspired by Alexander Rossell Hayes'
 [{nombre}](https://nombre.rossellhayes.com/) package:
