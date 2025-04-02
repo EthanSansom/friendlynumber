@@ -972,7 +972,8 @@ english_fractionals.numeric <- function(
     zero = "zero",
     and = FALSE,
     hyphenate = TRUE,
-    english_fractions = get_english_fractions(1)
+    english_fractions = get_english_fractions(1),
+    ...
   ) {
 
   out <- character(length(fractionals))
@@ -1013,13 +1014,13 @@ english_fractionals.numeric <- function(
   out
 }
 
-# TODO: Test
 english_fractionals.bignum_bigfloat <- function(
     fractionals,
     zero = "zero",
     and = FALSE,
     hyphenate = TRUE,
-    english_fractions = get_english_fractions(bignum::bigfloat("1"))
+    english_fractions = get_english_fractions(bignum::bigfloat("1")),
+    ...
   ) {
 
   out <- character(length(fractionals))
