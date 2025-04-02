@@ -22,7 +22,7 @@ format_number(x, ...)
 \method{format_number}{default}(x, ...)
 }
 \arguments{
-\item{x}{A vector of numbers to format. The {friendlynumber} package defines
+\item{x}{A vector of numbers to format. The friendlynumber package defines
 methods for integer, numeric, \code{\link[bignum:biginteger]{bignum::biginteger()}}, and
 \code{\link[bignum:bigfloat]{bignum::bigfloat()}} numbers.}
 

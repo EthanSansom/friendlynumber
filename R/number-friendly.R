@@ -10,7 +10,7 @@
 #'
 #' @param numbers
 #'
-#' A vector of numbers to translate. The {friendlynumber} package defines
+#' A vector of numbers to translate. The friendlynumber package defines
 #' methods for integer, numeric, [bignum::biginteger()], and
 #' [bignum::bigfloat()] numbers.
 #'

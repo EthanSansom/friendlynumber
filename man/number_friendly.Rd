@@ -136,7 +136,7 @@ number_friendly_safe(numbers, ...)
 \method{number_friendly_safe}{default}(numbers, ...)
 }
 \arguments{
-\item{numbers}{A vector of numbers to translate. The {friendlynumber} package defines
+\item{numbers}{A vector of numbers to translate. The friendlynumber package defines
 methods for integer, numeric, \code{\link[bignum:biginteger]{bignum::biginteger()}}, and
 \code{\link[bignum:bigfloat]{bignum::bigfloat()}} numbers.
 \itemize{

@@ -17,7 +17,7 @@
 #'
 #' @param x
 #'
-#' A vector of numbers to format. The {friendlynumber} package defines
+#' A vector of numbers to format. The friendlynumber package defines
 #' methods for integer, numeric, [bignum::biginteger()], and
 #' [bignum::bigfloat()] numbers.
 #'
