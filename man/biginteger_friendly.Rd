@@ -78,23 +78,23 @@ and raises an informative error otherwise. \code{biginteger_friendly()} does not
 perform input validation to maximize its speed.
 }
 \examples{
-if (requireNamespace("bignum", quietly = TRUE)) {
-  biginteger_friendly(bignum::biginteger(c(0, 1, 2, NA, 10001)))
+\dontshow{if (requireNamespace("bignum", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+biginteger_friendly(bignum::biginteger(c(0, 1, 2, NA, 10001)))
 
-  # Specify the translations of "special" numbers
-  biginteger_friendly(bignum::biginteger(-10), negative = "minus ")
-  biginteger_friendly(bignum::biginteger(NA), na = "unknown")
+# Specify the translations of "special" numbers
+biginteger_friendly(bignum::biginteger(-10), negative = "minus ")
+biginteger_friendly(bignum::biginteger(NA), na = "unknown")
 
-  # Modify the output formatting
-  biginteger_friendly(bignum::biginteger(9999))
-  biginteger_friendly(bignum::biginteger(9999), and = TRUE)
-  biginteger_friendly(bignum::biginteger(9999), hyphenate = FALSE)
+# Modify the output formatting
+biginteger_friendly(bignum::biginteger(9999))
+biginteger_friendly(bignum::biginteger(9999), and = TRUE)
+biginteger_friendly(bignum::biginteger(9999), hyphenate = FALSE)
 
-  # Translate large numbers
-  large <- bignum::biginteger(10L)^1001L
-  biginteger_friendly(large)
+# Translate large numbers
+large <- bignum::biginteger(10L)^1001L
+biginteger_friendly(large)
 
-  # Input validation
-  try(biginteger_friendly_safe(1L))
-}
+# Input validation
+try(biginteger_friendly_safe(1L))
+\dontshow{\}) # examplesIf}
 }

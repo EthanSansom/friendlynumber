@@ -17,8 +17,4 @@ are not overwritten on load.
 \examples{
 friendlynumber_default_options()
 
-# Reset the package options
-if (FALSE) {
-  options(friendlynumber_default_options())
-}
 }

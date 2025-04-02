@@ -101,7 +101,7 @@ translations. In this case \code{1 / 2} is translated as \code{"five tenths"} in
 of \code{"one half"}.}
 }
 \value{
-A non-NA character vector of the same length as \code{numbers}.
+The value \code{NULL}.
 }
 \description{
 Default parameter descriptions which may be overridden in individual

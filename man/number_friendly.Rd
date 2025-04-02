@@ -233,11 +233,6 @@ perform input validation to maximize its speed.
 number_friendly(c(1/3, 0, 0.999, NA, NaN, Inf, -Inf))
 number_friendly(c(1L, 2L, 1001L))
 
-if (requireNamespace("bignum", quietly = TRUE)) {
-  number_friendly(bignum::bigfloat(0.1234))
-  number_friendly(bignum::biginteger(10L)^50L)
-}
-
 # Input validation
 try(number_friendly_safe(1L, zero = c("a", "zero")))
 }

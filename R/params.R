@@ -105,8 +105,6 @@
 #' @keywords internal
 #' @aliases parameters arguments args
 #' @usage NULL
-#' @examples
-#' params()
 # nocov start
 params <- function(...) NULL
 # nocov end
