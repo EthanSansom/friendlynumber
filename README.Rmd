@@ -55,7 +55,7 @@ library(friendlynumber)
 
 ### Cardinal Numerals
 
-`number_friendly()` is an S3 generic which converts numbers in `R` into cardinal numerals.
+`number_friendly()` is an S3 generic which converts numbers into cardinal numerals.
 
 ```{r number-friendly}
 number_friendly(c(0:3, 2/3, 1/100, NA, NaN, Inf))

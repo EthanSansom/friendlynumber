@@ -47,7 +47,7 @@ library(friendlynumber)
 
 ### Cardinal Numerals
 
-`number_friendly()` is an S3 generic which converts numbers in `R` into
+`number_friendly()` is an S3 generic which converts numbers into
 cardinal numerals.
 
 ``` r
@@ -187,9 +187,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english         89.71µs  94.18µs    10271.     140KB     33.9
-#> 2 nombre         120.42µs 124.64µs     7915.     685KB     31.5
-#> 3 friendlynumber   6.68µs   7.26µs   135339.        0B     40.6
+#> 1 english         89.54µs  92.95µs    10520.     140KB     33.9
+#> 2 nombre         120.83µs 125.95µs     7666.     685KB     29.4
+#> 3 friendlynumber   6.64µs   7.26µs   134666.        0B     40.4
 ```
 
 ``` r
@@ -202,9 +202,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english           174µs  178.3µs     5546.    8.26KB     27.2
-#> 2 nombre            125µs  131.3µs     7407.        0B     31.7
-#> 3 friendlynumber   34.7µs   36.6µs    26450.        0B     29.1
+#> 1 english         174.3µs    179µs     5498.    8.26KB     27.2
+#> 2 nombre          126.2µs  130.6µs     7468.        0B     31.7
+#> 3 friendlynumber   34.7µs   36.2µs    27136.        0B     29.9
 ```
 
 ``` r
@@ -218,9 +218,9 @@ bench::mark(
 #> # A tibble: 3 × 6
 #>   expression          min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr>     <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 english           1.25s    1.25s     0.801    2.34MB    12.8 
-#> 2 nombre          45.37ms  47.39ms    21.2     11.43MB    11.6 
-#> 3 friendlynumber   8.94ms   9.14ms   105.       3.87MB     7.92
+#> 1 english           1.24s    1.24s     0.804    2.34MB    12.1 
+#> 2 nombre           45.4ms  47.82ms    20.8     11.43MB    11.4 
+#> 3 friendlynumber   8.91ms    9.2ms   105.       3.87MB     7.89
 ```
 
 To increase the speed of processing scalar inputs, the set of
